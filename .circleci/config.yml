@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  bw-dev-XXXXX-build:
+    docker:
+      - image: rhinogram/node-awscli
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: Set package home
+          command: npm config set registry http://registry.npmjs.org/
+
+      - run:
+          name: Import NPM Key
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+
+      # Download and cache dependencies
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+
+      - run:
+          name: install-npm-packages
+          command: npm install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      # test
+      - run: npm run test:unit
+
+      - run:
+          name: build and deploy bw dev yo!
+          command: |
+            aws configure --profile default set aws_access_key_id $BW_AWS_ACCESS_KEY_ID
+            aws configure --profile default set aws_secret_access_key $BW_AWS_SECRET_ACCESS_KEY
+            aws configure --profile default set region $BW_AWS_REGION
+            npm run deploy:dev
+workflows:
+  version: 2
+  bw-deploy-to-dev:
+    jobs:
+    - bw-dev-XXXXX-build:
+        context: bw-aws
+        filters:
+          branches:
+            only:
+              - bw-deploy-to-dev

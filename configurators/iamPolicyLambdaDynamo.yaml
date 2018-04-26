@@ -1,0 +1,21 @@
+---
+
+Type: AWS::IAM::Policy
+Properties:   # add service specific name
+  PolicyName: com-mpa-XXXXXX-auth-dynamo
+  PolicyDocument:
+    Version: "2012-10-17"
+    Statement:
+    - Effect: Allow
+      Action:
+        - dynamoDb:Scan
+        - dynamoDb:*Item
+        - dynamoDb:Query
+        - dynamoDb:DescribeStream
+        - dynamoDb:GetRecords
+        - dynamoDb:GetShardIterator
+        - dynamoDb:ListStreams
+      Resource:
+        - "Fn::Join": ["", ["arn:aws:dynamodb:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":table/*"]]
+  Roles:
+  - "Ref": "IamRoleLambdaExecution"

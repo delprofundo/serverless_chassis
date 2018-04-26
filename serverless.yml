@@ -1,0 +1,85 @@
+service: XXXXX-service
+frameworkVersion: ^1.26.0
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  tracing: true
+  stage: ${opt:stage, self:custom.defaultStage}
+  #profile: ${self:custom.profiles.${self:provider.stage}}
+  #region: ${opt:region, self:custom.defaultRegion}
+  memorySize: 128 # this parameter doesnt only change how much memory is available but also CPU's and container life.
+  timeout: 20
+  environment:
+    #Example envar declaration
+    #MERCHANTS_TABLE_NAME: merchants-${opt:stage, self:provider.stage}
+    DEPLOY_REGION: ${opt:region, self:provider.region}
+    API_ROOT: ${self:custom.domainName}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - cognito-idp:Admin*
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: "*"
+package:
+  include:
+    - configurators
+    - lib
+  exclude:
+    - tmp
+    - .git
+    - .idea
+    - support
+plugins:
+  - serverless-plugin-tracing
+  - serverless-mocha-plugin
+  - serverless-webpack
+  - serverless-plugin-bind-deployment-id
+  # - serverless-plugin-warmup
+  #- serverless-dynamodb-local
+custom:
+  #warmup:
+  #  cleanFolders: false
+  local: ${file(./environmentSpecific.yml)} #a file for deployment specific values, can be supplied by Param Store
+  webpackIncludeModules: true
+  grub: XXXXX-api
+  defaultStage: dev
+  defaultBasePath: XXXXX
+  domainName: ${self:custom.local.customDomainName}
+  profiles:
+    dev: default
+  #defaultRegion: us-east-1
+  regions:
+    dev: us-east-1
+    uat: us-east-1
+    prod: ap-southeast-2
+  basePath:
+    dev: XXXXX
+    uat: XXXXX
+    prod: XXXXX
+functions:
+  pingXXXXX:
+    handler: handler.ping
+    name: ${self:provider.stage}-${self:custom.grub}-ping
+    events:
+    - http:
+        path: /ping
+        method: get
+        cors: true
+# Resources are essentially CloudFormation scripts. These are kept in the configurators folder
+resources:
+  Resources:
+    #this entry allows access to the otherwise tricky deployment resource
+    __deployment__:
+      Properties:
+        Description: Deployment alias for resources that depend on deployment id
+    IamPolicyLambdaDynamo:
+      $ref: ./configurators/iamPolicyLambdaDynamo.yaml
+    PathMapping:
+      $ref: ./configurators/pathMapping.yaml
+    ApiGatewayStage:
+      $ref: ./configurators/apiGatewayStage.yaml
+

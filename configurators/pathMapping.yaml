@@ -1,0 +1,10 @@
+---
+
+Type: AWS::ApiGateway::BasePathMapping
+DependsOn: ApiGatewayStage
+Properties:
+  BasePath: ${self:custom.basePath.${self:provider.stage}}
+  DomainName: ${self:custom.domainName}
+  RestApiId:
+    Ref: ApiGatewayRestApi
+  Stage: ${opt:stage, self:provider.stage}
