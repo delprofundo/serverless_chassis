@@ -37,11 +37,11 @@ it is recommended you follow the laid out structure:
 
 #### continuous integration
 
-this chassis includes a circleCi configuration, i have left my personal dev account config in here as an example. we add a workflow per deveopler/stage, if you choose to do the same you will need to [configure your context in circleCi](https://circleci.com/docs/2.0/contexts/) either with the credentials created above or a specific set (the latter is strongly recommended).
+this chassis includes a circleCi configuration, i have left my personal dev account config in here as an example. we add a workflow per developer/stage, if you choose to do the same you will need to [configure your context in circleCi](https://circleci.com/docs/2.0/contexts/) either with the credentials created above or a specific set (the latter is strongly recommended).
 
 #### configurators folder
 
-this is where serverless component like tables, streams and bindings should be created. these are then referenced in the Resources section of serverless.yml
+this is where serverless components like tables, streams and bindings should be created. these are then referenced in the Resources section of serverless.yml
 
 #### lib folder
 

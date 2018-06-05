@@ -1,3 +1,2 @@
 customDomainName: ${ssm:/XXXXX/api/url}
 #customDomainNAme: somedomain.com
-#masterSalt: ${ssm:/gig/auth/master/salt~true}

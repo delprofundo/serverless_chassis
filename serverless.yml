@@ -64,10 +64,20 @@ functions:
   pingXXXXX:
     handler: handler.ping
     name: ${self:provider.stage}-${self:custom.grub}-ping
+    description: a simple payload ping GET test
     events:
     - http:
         path: /ping
         method: get
+        cors: true
+  echoXXXXX:
+    handler: handler.echo
+    name: ${ self:provider.stage}-${self:custom.grub}-echo
+    description: a simple payload echo POST test
+    events:
+    - http:
+        path: /echo
+        method: post
         cors: true
 # Resources are essentially CloudFormation scripts. These are kept in the configurators folder
 resources:

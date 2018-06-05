@@ -5,11 +5,18 @@ const should = chai.Should();
 
 const sinon = require('sinon');
 const { ping, echo } = require( '../../../lib/util.server.library' );
-const STATIC_PONG = "PONG";
+const STATIC_PONG = { message: 'PONG' };
 const ECHO_REQUEST = { value : 'Generic Test Phrase' };
 
 describe( 'util api tests', function() {
-  it( 'ping should pong', function( ) {
-    return ping().should.eventually.deep.equal({ message: 'PONG' })
+  context( 'ping tests', function() {
+    it('ping should pong', function () {
+      return ping().should.eventually.deep.equal( STATIC_PONG )
+    });
+  });
+  context( 'echo tests', function() {
+    it( 'echo echos given payload', function() {
+      return echo( ECHO_REQUEST ).should.eventually.deep.equal( ECHO_REQUEST )
+    })
   })
 });
