@@ -8,7 +8,7 @@
     "deploy:uat": "node ./node_modules/serverless/bin/serverless deploy -v --stage uat --region ap-southeast-2",
     "test:unit": "nyc ./node_modules/mocha/bin/mocha --quiet --require should --require babel-core/register --ui bdd 'test/unit/**/**.spec.js'",
     "test:cover": "babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha 'test/unit/**/**.spec.js'",
-    "docs": "./node_modules/.bin/jsdoc -c jsdoc.json"
+    "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-XXXXX-service#readme",
   "devDependencies": {
     "assert": "^1.4.1",
-    "aws-sdk": "2.251.1",
+    "aws-sdk": "2.252.1",
     "aws-sdk-mock": "2.0.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
@@ -44,8 +44,8 @@
     "serverless-plugin-warmup": "3.6.1-rc.1",
     "serverless-webpack": "5.1.5",
     "should": "13.2.1",
-    "sinon": "5.0.10",
-    "webpack": "4.10.2",
+    "sinon": "5.1.0",
+    "webpack": "4.11.1",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
