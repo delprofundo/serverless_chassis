@@ -19,8 +19,8 @@
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-XXXXX-service#readme",
   "devDependencies": {
     "assert": "^1.4.1",
-    "aws-sdk": "2.252.1",
-    "aws-sdk-mock": "2.0.0",
+    "aws-sdk": "2.263.1",
+    "aws-sdk-mock": "4.0.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
     "babel-istanbul": "0.12.2",
@@ -44,8 +44,8 @@
     "serverless-plugin-warmup": "3.6.1-rc.1",
     "serverless-webpack": "5.1.5",
     "should": "13.2.1",
-    "sinon": "5.1.0",
-    "webpack": "4.11.1",
+    "sinon": "6.0.0",
+    "webpack": "4.12.1",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
