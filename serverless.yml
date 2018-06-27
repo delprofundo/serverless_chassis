@@ -1,5 +1,5 @@
 service: XXXXX-service
-frameworkVersion: ^1.26.0
+frameworkVersion: ^1.27.3
 
 provider:
   name: aws
@@ -11,8 +11,6 @@ provider:
   memorySize: 128 # this parameter doesnt only change how much memory is available but also CPU's and container life.
   timeout: 20
   environment:
-    #Example envar declaration
-    #MERCHANTS_TABLE_NAME: merchants-${opt:stage, self:provider.stage}
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
   iamRoleStatements:
@@ -47,7 +45,7 @@ custom:
   webpackIncludeModules: true
   grub: XXXXX-api
   defaultStage: dev
-  defaultBasePath: XXXXX
+  basePath: XXXXX
   domainName: ${self:custom.local.customDomainName}
   profiles:
     dev: default
@@ -56,10 +54,6 @@ custom:
     dev: us-east-1
     uat: us-east-1
     prod: ap-southeast-2
-  basePath:
-    dev: XXXXX
-    uat: XXXXX
-    prod: XXXXX
 functions:
   pingXXXXX:
     handler: handler.ping
