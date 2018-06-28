@@ -19,7 +19,7 @@
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-XXXXX-service#readme",
   "devDependencies": {
     "assert": "^1.4.1",
-    "aws-sdk": "2.264.1",
+    "aws-sdk": "2.265.1",
     "aws-sdk-mock": "4.0.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
