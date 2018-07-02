@@ -19,7 +19,7 @@
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-XXXXX-service#readme",
   "devDependencies": {
     "assert": "^1.4.1",
-    "aws-sdk": "2.265.1",
+    "aws-sdk": "2.266.1",
     "aws-sdk-mock": "4.0.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
@@ -46,7 +46,7 @@
     "serverless-webpack": "5.1.5",
     "should": "13.2.1",
     "sinon": "6.0.1",
-    "webpack": "4.12.2",
+    "webpack": "4.14.0",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
@@ -57,6 +57,6 @@
     "request": "2.87.0",
     "request-promise": "4.2.2",
     "source-map-support": "0.5.6",
-    "uuid": "3.3.0"
+    "uuid": "3.3.2"
   }
 }
