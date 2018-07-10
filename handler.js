@@ -1,8 +1,10 @@
+const DEPLOY_REGION = process.env.DEPLOY_REGION
+
 const util = require( './lib/util.server.library' );
 //ADD LIB's HERE
 
 const AWS = require( "aws-sdk" );
-AWS.config.update({ region:'us-east-1' });
+AWS.config.update({ region: DEPLOY_REGION });
 //declare the DB here and inject it to all calls that require it
 const db = new AWS.DynamoDB.DocumentClient();
 
