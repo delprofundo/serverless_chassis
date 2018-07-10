@@ -13,6 +13,8 @@ provider:
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
+    #HONEYCOMB_API_KEY: ${self:custom.honeycombAPIKey}
+    #HONEYCOMB_DATASET: ${self:custom.honeycombDataset}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -47,6 +49,8 @@ custom:
   defaultStage: dev
   basePath: XXXXX
   domainName: ${self:custom.local.customDomainName}
+  #honeycombAPIKey: ${self:custom.local.honeycombAPIKey}
+  #honeycombDataset: ${self:custom.local.honeycombDataset}
   profiles:
     dev: default
   #defaultRegion: us-east-1
