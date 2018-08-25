@@ -2,11 +2,11 @@
  * returns an object used by authoriser to verify permissions
  */
 const USER_TYPES = {
-  ADMIN: 'ADMINS',
-  BRAND_ADMIN: 'BRAND_ADMINS',
-  SYSTEM: 'SYSTEM', // TODO : discuss exploding this to a few categories (ie servicename/eventsource)
-  MEMBER: 'MEMBERS',
-  ANONYMOUS: 'ANONYMOUS'
+  ADMIN: "ADMINS",
+  BRAND_ADMIN: "BRAND_ADMINS",
+  SYSTEM: "SYSTEM",
+  MEMBER: "MEMBERS",
+  ANONYMOUS: "ANONYMOUS"
 };
 const METHODS = {
   GET: "GET",
@@ -31,42 +31,43 @@ module.exports = function({ path, resource, method, userType }) {
   console.log(`passed in path = ${path}`);
 
   let pathObj = permissionsMatrix.find( pathItem => {
-    console.log(`paf item :`, JSON.stringify(pathItem));
-    console.log(`actual paf item`, pathItem.path);
+    console.log( "paf item :", JSON.stringify(pathItem));
+    console.log( "actual paf item", pathItem.path);
     console.log(path === pathItem.path);
-    return pathItem.path === path
+    return pathItem.path === path;
   });
   // get the resource object
   let resourceObj = pathObj.resources.find( resourceItem => {
     console.log(resourceItem);
-    return resourceItem.resource === resource
+    return resourceItem.resource === resource;
   });
-  if( typeof resourceObj === 'undefined' || resourceObj === null ) {
-    console.log(`failed finding resource in : `, JSON.stringify(resourceObj));
-    return false
+  if( typeof resourceObj === "undefined" || resourceObj === null ) {
+    console.log("failed finding resource in : ", JSON.stringify(resourceObj));
+    return false;
   }
   // get the method object
   let methodObj = resourceObj.methods.find( methodItem => {
-    return methodItem.method === method
+    return methodItem.method === method;
   });
-  if( typeof methodObj === 'undefined' || methodObj === null ) {
-    console.log(`failed finding method in : `, JSON.stringify(methodObj));
-    return false
+  if( typeof methodObj === "undefined" || methodObj === null ) {
+    console.log( "failed finding method in : ", JSON.stringify( methodObj ));
+    return false;
   }
   // check if the user has access
   let permittedUser = methodObj.allow.find( userItem => {
-    return userItem === userType.toUpperCase()
+    return userItem === userType.toUpperCase();
   });
-  if( typeof permittedUser === 'undefined' || permittedUser === null ) {
-    console.log( `failed as user type not in method user type allow list ` );
-    return false
+  if( typeof permittedUser === "undefined" || permittedUser === null ) {
+    console.log( "failed as user type not in method user type allow list" );
+    return false;
   } else {
-    return true
+    return true;
   }
 }; // end validateAccess
 
 /**
  * This array stores an object for each API path with nested entries allowing simple lookup of permissions
+ * YOU MUST REPLACE THIS WITH YOUR OWN STRUCTURE.
  */
 const permissionsMatrix = [
   {

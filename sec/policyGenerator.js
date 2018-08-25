@@ -9,7 +9,6 @@
 module.exports = function( userId, effect, resource, context ) {
   console.log(`building IAM policy for user: ${ userId }, effect: ${ effect }, on resource: ${ resource }, context: ${ context }`);
   // TODO : test all input is valid and reject if not
-
   //assemble IAM policy document to return
   const policy = {
     principalId: userId,
@@ -29,7 +28,7 @@ module.exports = function( userId, effect, resource, context ) {
     }//,
     //TODO: context
   };
-  console.log(`generated policy document: `, JSON.stringify( policy ));
+  console.log( "generated policy document: ", JSON.stringify( policy ));
   return policy;
   //})
 }; // end buildIAMPolicy
