@@ -1,5 +1,5 @@
 service: XXXXX-service
-frameworkVersion: ^1.28.0
+frameworkVersion: ^1.30.0
 
 provider:
   name: aws
@@ -13,6 +13,8 @@ provider:
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
+    COGNITO_USER_POOL_ID: ${self:custom.cognitoUserPoolId}
+    COGNITO_REGION: ${self:custom.cognitoRegion}
     #HONEYCOMB_API_KEY: ${self:custom.honeycombAPIKey}
     #HONEYCOMB_DATASET: ${self:custom.honeycombDataset}
   iamRoleStatements:
@@ -49,6 +51,8 @@ custom:
   defaultStage: dev
   basePath: XXXXX
   domainName: ${self:custom.local.customDomainName}
+  cognitoUserPoolId: PLACEHOLDER_CREATE_SSM_REFERENCE
+  cognitoRegion: PLACEHOLDER_CREATE_SSM_REFERENCE_OR_HARD_CODE_HERE
   #honeycombAPIKey: ${self:custom.local.honeycombAPIKey}
   #honeycombDataset: ${self:custom.local.honeycombDataset}
   profiles:
@@ -59,6 +63,10 @@ custom:
     uat: us-east-1
     prod: ap-southeast-2
 functions:
+  authorizer:
+    name: ${self:provider.stage}-${self:custom.grub}-authorizer
+    handler: sec/authorize.handler
+    description: must use US spelling for authorize function.
   pingXXXXX:
     handler: handler.ping
     name: ${self:provider.stage}-${self:custom.grub}-ping
