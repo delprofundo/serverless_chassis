@@ -1,3 +1,9 @@
+/**
+ * service handler
+ * delprofundo (@brunowatt)
+ * bruno@hypermedia.tech
+ * @module XXXXX/ServiceHandler
+ */
 //const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY;
 //const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET;
 import {
