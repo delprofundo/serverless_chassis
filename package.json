@@ -6,7 +6,8 @@
   "scripts": {
     "deploy:dev": "node ./node_modules/serverless/bin/serverless deploy -v --stage dev --region us-east-1",
     "deploy:uat": "node ./node_modules/serverless/bin/serverless deploy -v --stage uat --region ap-southeast-2",
-    "test:unit": "cross-env NODE_ENV=test nyc mocha 'test/unit/**/**.spec.js'",
+    "test:unit": "mocha --quiet --require should --require @babel/register 'test/unit/**/**.spec.js'",
+    "test:cover": "cross-env NODE_ENV=test nyc mocha --quiet --require should --require @babel/register 'test/unit/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
     "lint:js": "eslint ./ --fix"
   },
@@ -18,23 +19,24 @@
   "license": "Apache-2.0",
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-XXXXX-service#readme",
   "devDependencies": {
-    "@babel/cli": "7.1.0",
-    "@babel/core": "7.1.0",
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
     "@babel/node": "7.0.0",
     "@babel/plugin-transform-runtime": "7.1.0",
     "@babel/preset-env": "7.1.0",
     "@babel/preset-stage-3": "7.0.0",
     "@babel/register": "7.0.0",
     "assert": "^1.4.1",
-    "aws-sdk": "2.307.0",
-    "aws-sdk-mock": "4.1.0",
-    "babel-loader": "8.0.2",
-    "babel-plugin-istanbul": "5.1.0",
-    "chai": "4.1.2",
+    "aws-sdk": "2.333.0",
+    "aws-sdk-mock": "4.2.0",
+    "babel-loader": "8.0.4",
+    "babel-plugin-istanbul": "5.0.1",
+    "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-things": "0.2.0",
-    "copy-webpack-plugin": "4.5.2",
-    "eslint": "5.6.0",
+    "copy-webpack-plugin": "4.5.3",
+    "cross-env": "5.2.0",
+    "eslint": "5.6.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
     "istanbul": "0.4.5",
@@ -48,15 +50,15 @@
     "serverless-mocha-plugin": "1.9.0",
     "serverless-plugin-bind-deployment-id": "1.0.1",
     "serverless-plugin-tracing": "2.0.0",
-    "serverless-plugin-warmup": "3.6.2-rc.1",
+    "serverless-plugin-warmup": "4.0.0-rc.1",
     "serverless-webpack": "5.2.0",
     "should": "13.2.3",
-    "sinon": "6.3.4",
-    "webpack": "4.19.1",
+    "sinon": "6.3.5",
+    "webpack": "4.20.2",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
-    "@babel/runtime": "7.0.0",
+    "@babel/runtime": "7.1.2",
     "aws-xray-sdk-core": "2.0.0",
     "jsonwebtoken": "8.3.0",
     "jwk-to-pem": "2.0.0",
@@ -67,5 +69,16 @@
     "source-map-support": "0.5.9",
     "uuid": "3.3.2",
     "validation-tools": "1.10.1"
+  },
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

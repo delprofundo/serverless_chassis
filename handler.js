@@ -9,7 +9,7 @@
 import {
   RESifySuccess,
   RESifyErr
-} from "./lib/RESifier.representor.library";
+} from "./lib/awsHelpers/RESifier.representor.library";
 
 const DEPLOY_REGION = process.env.DEPLOY_REGION;
 
