@@ -63,8 +63,8 @@ custom:
     uat: us-east-1
     prod: ap-southeast-2
 functions:
-  authorizer:
-    name: ${self:provider.stage}-${self:custom.grub}-authorizer
+  authorize:
+    name: ${self:provider.stage}-${self:custom.grub}-authorize
     handler: sec/authorize.handler
     description: must use US spelling for authorize function.
   pingXXXXX:
