@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+ssh://git@bitbucket.org:hypermediatech/PROJECTNAME-XXXXX-service.git"
   },
-  "author": "XXXXX",
+  "author": "delProfundo",
   "license": "Apache-2.0",
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-XXXXX-service#readme",
   "devDependencies": {
