@@ -4,6 +4,6 @@
       "plugins": [ "istanbul" ]
     }
   },
-  "plugins": [ ["@babel/plugin-transform-runtime"]],
+  "plugins": ["source-map-support", ["@babel/plugin-transform-runtime"]],
   "presets": [ "@babel/preset-env" ]
 }

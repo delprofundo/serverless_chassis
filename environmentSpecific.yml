@@ -1,4 +1,4 @@
-customDomainName: ${ssm:/XXXXX/api/url}
+#customDomainName: ${ssm:/liars/api/url}
 #customDomainNAme: somedomain.com
 #honeycombAPIKey: ${ssm:/XXXXX/honeycomb/api/key~true}
 #honeycombDataset: hypermedia.tech-node-js

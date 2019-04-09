@@ -1,22 +1,16 @@
 service: XXXXX-service
-frameworkVersion: ^1.34.1
+frameworkVersion:  ">=1.0.0 <2.0.0"
 
 provider:
   name: aws
   runtime: nodejs8.10
   tracing: true
   stage: ${opt:stage, self:custom.defaultStage}
-  #profile: ${self:custom.profiles.${self:provider.stage}}
-  #region: ${opt:region, self:custom.defaultRegion}
   memorySize: 128 # this parameter doesnt only change how much memory is available but also CPU's and container life.
   timeout: 20
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
-    COGNITO_USER_POOL_ID: ${self:custom.cognitoUserPoolId}
-    COGNITO_REGION: ${self:custom.cognitoRegion}
-    #HONEYCOMB_API_KEY: ${self:custom.honeycombAPIKey}
-    #HONEYCOMB_DATASET: ${self:custom.honeycombDataset}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -37,11 +31,8 @@ package:
     - support
 plugins:
   - serverless-plugin-tracing
-  - serverless-mocha-plugin
   - serverless-webpack
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-warmup
-  #- serverless-dynamodb-local
 custom:
   #warmup:
   #  cleanFolders: false

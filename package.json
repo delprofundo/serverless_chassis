@@ -8,6 +8,7 @@
     "deploy:uat": "node ./node_modules/serverless/bin/serverless deploy -v --stage uat --region ap-southeast-2",
     "test:unit": "mocha --quiet --require should --require @babel/register 'test/unit/**/**.spec.js'",
     "test:cover": "cross-env NODE_ENV=test nyc mocha --quiet --require should --require @babel/register 'test/unit/**/**.spec.js'",
+    "test:e2e": "mocha --quiet --require should --timeout 10000 --require @babel/register 'test/e2e/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
     "lint:js": "eslint ./ --fix"
   },
