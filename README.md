@@ -59,10 +59,6 @@ serverless.yml is configured to use mocha testing out of the box, it will look f
 
 i have not been working in an offline mode, instead using the included CircleCI script to test in a dev environment, do with the repo what you please but i welcome and encourage assistance in configuring and documenting serverless, dynamo and kinesis offline support.
 
-### xRay and Honeycomb
-
-i use both of these extensively (and dashbird as well which gives you some nice xray integration out of the box). There are some commented out settings for  [honeycomb](http://honeycomb.io) in the serverless, environment and handler files. And the handler call to AWS-SDK is wrapped in the outer xRay invocation.
-
 author: bruno@hypermedia.tech
 
 ![alt text](https://s3-ap-southeast-2.amazonaws.com/hypermedia.media/ht_square_small.png "hypermedia.tech")
