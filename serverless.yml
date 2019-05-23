@@ -3,7 +3,7 @@ frameworkVersion:  ">=1.0.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   tracing: true
   stage: ${opt:stage, self:custom.defaultStage}
   memorySize: 128 # this parameter doesnt only change how much memory is available but also CPU's and container life.
