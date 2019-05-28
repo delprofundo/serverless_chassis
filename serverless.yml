@@ -6,7 +6,7 @@ provider:
   runtime: nodejs10.x
   tracing: true
   stage: ${opt:stage, self:custom.defaultStage}
-  memorySize: 128 # this parameter doesnt only change how much memory is available but also CPU's and container life.
+  memorySize: 256
   timeout: 20
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
