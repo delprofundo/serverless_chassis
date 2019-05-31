@@ -11,6 +11,7 @@ provider:
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
+    JWA_PEM_PATH: ${self:custom.jwaPemPath}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -41,6 +42,10 @@ custom:
   grub: XXXXX-api
   defaultStage: dev
   basePath: XXXXX
+  jwaPemPath: ${self:custom.local.jwaPemPath}
+  kmsKeyPath: ${self:custom.local.kmsKeyPath}
+  maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
+  systemMemberIdPath: ${self:custom.local.systemMemberIdPath}
   domainName: ${self:custom.local.customDomainName}
   cognitoUserPoolId: PLACEHOLDER_CREATE_SSM_REFERENCE
   cognitoRegion: PLACEHOLDER_CREATE_SSM_REFERENCE_OR_HARD_CODE_HERE

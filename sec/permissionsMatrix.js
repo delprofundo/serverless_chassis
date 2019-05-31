@@ -6,7 +6,6 @@
  * delProfundo (@brunowatt)
  * bruno@hypermedia.tech
  ********************************************/
-const logger = require( "log-winston-aws-level" );
 const SERVICE_BASE_PATH = process.env.SERVICE_BASE_PATH;
 
 const CLIENT_TYPES = {

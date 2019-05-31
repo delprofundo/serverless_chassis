@@ -1,64 +1,110 @@
 /**
  * CUSTOM AUTHORIZER
- * 11 Jan 2019
+ * 01 Jun 2019
  * delprofundo (@brunowatt)
  * bruno@hypermedia.tech
  * @module sec/authorize
  */
+const DEPLOY_REGION = process.env.DEPLOY_REGION;
+const MAX_TOKEN_EXPIRY_PATH = process.env.MAX_TOKEN_EXPIRY_PATH;
+const USER_POOL_ID_PATH = process.env.COGNITO_USER_POOL_ID_PATH;
+const SYSTEM_MEMBER_ID_PATH = process.env.SYSTEM_MEMBER_ID_PATH;
+const JWA_PEM_PATH = process.env.JWA_PEM_PATH;
 const logger = require("log-winston-aws-level");
 const moment = require( "moment" );
-import { unstring } from "../lib/awsHelpers/general.helper.library";
-const jose  = require( "node-jose" );
 const permissionsMatrix = require( "./permissionsMatrix" );
-const JWA_KEY = process.env.JWA_KEY;
-const MAX_TOKEN_EXPIRY = process.env.MAX_TOKEN_EXPIRY;
+const { decryptJWE } = require( "jwe-handler" );
+import { getSecretValue, getValue } from "../lib/awsHelpers/general.helper.library";
 
-export const handler = ( event, context, callback ) => {
-  console.log(moment().add( MAX_TOKEN_EXPIRY, "minutes" ).unix());
-  console.log( MAX_TOKEN_EXPIRY );
-  let localKeystore = jose.JWK.createKeyStore();
+const AWS = require( "aws-sdk");
+AWS.config.update({ region: DEPLOY_REGION });
+const ssm = new AWS.SSM({apiVersion: "2014-11-06"});
+
+export const handler = async ( event, context ) => {
+  const authParams = await getAuthenticationParameters({
+    max: MAX_TOKEN_EXPIRY_PATH,
+    systemMemberId: SYSTEM_MEMBER_ID_PATH,
+    /*userPoolId: USER_POOL_ID_PATH,*/
+    jwaPem: JWA_PEM_PATH
+  });
+  const sourceClass = event.headers[ 'x-auth-class' ];
+  switch( sourceClass ) {
+    case "CONSOLE":
+      console.log("CONSOLE AUTH NOT SUPPORTED" );
+      authParams.iss = `https://cognito-idp.${ region }.amazonaws.com/${ authParams.userPoolId }`;
+      //return authenticateConsoleUser( authParams, event, context );
+      context.fail( "Unauthorized" );
+    case "INTEGRATION":
+      console.log( "INTEGRATION" );
+      return authenticateIntegratedUser( authParams, event, context );
+    default:
+      console.log( "default" );
+      return authenticateIntegratedUser( authParams, event, context );
+  }
+}; // end handler
+
+/**
+ * queries local system for AAA details.
+ * @param authParams
+ * @param event
+ * @param context
+ * @returns {Promise<void>}
+ */
+async function authenticateIntegratedUser( authParams, event, context ) {
+  logger.info( 'inside authenticateIntegratedUser', authParams, event );
+  const { jwaPem } = authParams;
+  const clientToken = event.headers[ "Authorization" ];
   let localClientRecord;
-  // 1. use the X-Auth-Class-Id header to look up client record
-  localKeystore.add( JWA_KEY )
-    .then(() => {
-      decryptClientJWE(event.headers["Authorization"], localKeystore)
-        .then(decryptedPayload => {
-          console.log("DECRYPTED : ", decryptedPayload);
-          localClientRecord = unstring( decryptedPayload );
+  let resultEffect;
+  try {
+    localClientRecord = await decryptJWE( clientToken, jwaPem );
+  } catch( err ) {
+    console.log( "error trying the decrypt : ", err );
+    context.fail( "Unauthorized" );
+  }
+  if( hasTokenExpired( localClientRecord.expiry ) === true ) {
+    logger.info( "token has expired, auth failed" );
+    context.fail( "Unauthorized" );
+  }
+  let permissionCheckParams = {
+    path: extractBasePath(event.path),
+    resource: event.resource,
+    method: event.httpMethod,
+    memberRole: localClientRecord.role
+  };
+  try {
+    resultEffect = await permissionsMatrix.validateAccess( permissionCheckParams );
+    return await buildIamPolicy({
+      memberId: localClientRecord.memberId,
+      effect: resultEffect.effect,
+      resource: event.methodArn,
+      context: localClientRecord
+    })
+  } catch( err ) {
+    logger.error( "error building IAM policy", err );
+    context.fail( "Unauthorized" );
+  }
+} // end authenticateIntegratedUser
 
-          if( hasTokenExpired( localClientRecord.expiry ) === true ) {
-            logger.info( "token has expired, auth failed" );
-            callback( context.fail( "Unauthorized" ));
-          }
-
-          let permissionCheckParams = {
-            path: extractBasePath(event.path),
-            resource: event.resource,
-            method: event.httpMethod,
-            memberRole: localClientRecord.role
-          };
-          console.log("permCheckParams: ", permissionCheckParams);
-
-          return permissionsMatrix.validateAccess(permissionCheckParams);
-        })
-        .then(resultEffect => {
-          console.log("success from perm validate access");
-          return buildIamPolicy({
-            memberId: localClientRecord.memberId,
-            effect: resultEffect.effect,
-            resource: event.methodArn,
-            context: localClientRecord
-          });
-        })
-        .then(policyDocument => {
-          callback(null, policyDocument);
-        })
-        .catch(err => {
-          console.log( "err in authorizer : ", err  );
-          callback( context.fail( "Unauthorized" ));
-        });
-    });
-};
+/**
+ * getAuthenticationParameters will pull all the needed security parameters from ssm
+ * @param max
+ * @param systemMemberId
+ * @param jwaPem
+ * @returns {Promise<{maxTokenExpiry: ((D & {$response: Response<D, E>})|never), jwaPem: ((D & {$response: Response<D, E>})|never)}>}
+ */
+const  getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }) => {
+  const resultArr = await Promise.all([
+    await getSecretValue( jwaPem, ssm ),
+    await getValue( max, ssm ),
+    await getSecretValue( systemMemberId, ssm )
+  ]);
+  return {
+    jwaPem: resultArr[ 0 ],
+    maxTokenExpiry: resultArr[ 1 ],
+    systemMemberId: resultArr[ 2 ]
+  }
+}; // end getAuthenticationParametersNew
 
 /**
  * function returns bool stating if the unix time passed in is either
@@ -67,74 +113,48 @@ export const handler = ( event, context, callback ) => {
  * @returns {boolean}
  */
 function hasTokenExpired( tokenExpiryUnixTime ) {
-  logger.info( "passed in epoch time", tokenExpiryUnixTime );
-  if( moment().unix() >= tokenExpiryUnixTime ) {
-    logger.info( "now is greater than the token expiry" );
-    return true;
-  } else {
-    console.log( tokenExpiryUnixTime >= moment().add( MAX_TOKEN_EXPIRY, "minutes" ).unix());
-    return tokenExpiryUnixTime >= moment().add( MAX_TOKEN_EXPIRY, "minutes" ).unix();
-  }
+  return moment().unix() >= tokenExpiryUnixTime;
 } // end hasTokenExpired
 
-function decryptClientJWE( jwe, keystore ) {
-  return new Promise(( resolve, reject ) => {
-    jose.JWE.createDecrypt( keystore )
-      .decrypt( jwe )
-      .then( decryptedJWE => {
-        console.log( "decrypt success" );
-        resolve( JSON.parse(decryptedJWE.payload.toString()));
-      })
-      .catch( err => {
-        console.log( "failed decrypt", err );
-        reject( err );
-      });
-  });
-} // end decryptClientJWE
-
 /**
- * Function that creates an API Gateway policy document from validated input
+ *  Function that creates an API Gateway policy document from validated input
  * @param memberId
  * @param effect
  * @param resource
  * @param context
- * @returns {Promise<any>}
+ * @returns {Error|{policyDocument: {Version: string, Statement: {Action: string[], Resource: *[], Effect: *}[]}, context: *, principalId: *}}
  */
-function buildIamPolicy({ memberId, effect, resource, context }) {
-  return new Promise(( resolve, reject ) => {
-    //test all input is valid and reject if not
-    if(typeof memberId === "undefined" || memberId === null ) {
-      reject( new Error( "memberId required to identify user or client" ));
-    }
-    if(typeof effect === "undefined" || effect === null ) {
-      reject( new Error( "invalid effect field" ));
-    }
-    if(typeof resource === "undefined" || resource === null ) {
-      reject( new Error( "invalid resource field" ));
-    }
-    //assemble IAM policy document to return
-    const policy = {
-      principalId: memberId,
-      policyDocument: {
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: effect,
-            Action: [
-              "execute-api:Invoke"
-            ],
-            Resource: [
-              resource
-            ]
-          }
-        ]
-      },
-      context
-    };
-    console.log( "generated policy document: ", JSON.stringify( policy ));
-    resolve( policy );
-  });
-} // end buildIAMPolicy
+export function buildIamPolicy({ memberId, effect, resource, context }) {
+  //test all input is valid and reject if not
+  if(typeof memberId === "undefined" || memberId === null ) {
+    return new Error( "memberId required to identify user or client" );
+  }
+  if(typeof effect === "undefined" || effect === null ) {
+    return new Error( "invalid effect field" );
+  }
+  if(typeof resource === "undefined" || resource === null ) {
+    return new Error( "invalid resource field" );
+  }
+  //assemble IAM policy document to return
+  return {
+    principalId: memberId,
+    policyDocument: {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Effect: effect,
+          Action: [
+            "execute-api:Invoke"
+          ],
+          Resource: [
+            resource
+          ]
+        }
+      ]
+    },
+    context
+  };
+} // end buildIamPolicy
 
 /**
  * takes a path from an APIG event record and
@@ -142,7 +162,6 @@ function buildIamPolicy({ memberId, effect, resource, context }) {
  * @param path
  * @returns {string}
  */
-
 function extractBasePath( path ) {
   //break up the path at the back slashes
   const pathSegments = path.split("/").slice(1);

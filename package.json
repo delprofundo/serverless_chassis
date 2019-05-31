@@ -28,7 +28,7 @@
     "@babel/preset-stage-3": "^7.0.0",
     "@babel/register": "^7.4.4",
     "assert": "^2.0.0",
-    "aws-sdk": "^2.464.0",
+    "aws-sdk": "^2.466.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-istanbul": "^5.1.4",
     "chai": "^4.2.0",
@@ -57,7 +57,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.5",
     "aws-xray-sdk-core": "^2.3.3",
-    "jsonwebtoken": "^8.5.1",
+    "jwe-handler": "^1.0.0",
     "log-winston-aws-level": "^1.11.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
