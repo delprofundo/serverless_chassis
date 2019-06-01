@@ -25,34 +25,25 @@ const db = new AWS.DynamoDB.DocumentClient();
 /**
  * ping - simple GET test
  * @param event
- * @param context
- * @param cb
  */
-export const ping = ( event, context, cb ) => {
-  //hny.sendNow({
-  //  message: 'ping http call',
-  //});
-  util.ping( )
-    .then( res => {
-      cb( null, RESifySuccess( res ));
-    })
-    .catch( err => {
-      cb( null, RESifyErr( err ));
-    });
-}; //end ping
+export const ping = async ( event ) => {
+  try {
+    return RESifySuccess( await util.ping())
+  } catch( err ) {
+    logger.error( "error in ping : ", err );
+    throw RESifyErr( err );
+  }
+}; // end ping
 
 /**
  * echo - simple POST test
  * @param event
- * @param context
- * @param cb
  */
-export const echo = ( event, context, cb ) => {
-  util.echo( event.body )
-    .then( res => {
-      cb( null, RESifySuccess( res ));
-    })
-    .catch( err => {
-      cb( null, RESifyErr( err ));
-    });
-}; //end echo
+export const echo = async( event ) => {
+  try {
+    return RESifySuccess( await util.echo( event.body ));
+  } catch( err ) {
+    logger.error( "error in echo", err );
+    return RESifyErr( err );
+  }
+}; // end echo

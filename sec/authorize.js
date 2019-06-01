@@ -15,7 +15,6 @@ const moment = require( "moment" );
 const permissionsMatrix = require( "./permissionsMatrix" );
 const { decryptJWE } = require( "jwe-handler" );
 import { getSecretValue, getValue } from "../lib/awsHelpers/general.helper.library";
-
 const AWS = require( "aws-sdk");
 AWS.config.update({ region: DEPLOY_REGION });
 const ssm = new AWS.SSM({apiVersion: "2014-11-06"});
@@ -27,6 +26,7 @@ export const handler = async ( event, context ) => {
     /*userPoolId: USER_POOL_ID_PATH,*/
     jwaPem: JWA_PEM_PATH
   });
+/*
   const sourceClass = event.headers[ 'x-auth-class' ];
   switch( sourceClass ) {
     case "CONSOLE":
@@ -34,6 +34,7 @@ export const handler = async ( event, context ) => {
       authParams.iss = `https://cognito-idp.${ region }.amazonaws.com/${ authParams.userPoolId }`;
       //return authenticateConsoleUser( authParams, event, context );
       context.fail( "Unauthorized" );
+      break;
     case "INTEGRATION":
       console.log( "INTEGRATION" );
       return authenticateIntegratedUser( authParams, event, context );
@@ -41,6 +42,8 @@ export const handler = async ( event, context ) => {
       console.log( "default" );
       return authenticateIntegratedUser( authParams, event, context );
   }
+ */
+  return authenticateIntegratedUser( authParams, event, context );
 }; // end handler
 
 /**
@@ -135,7 +138,6 @@ export function buildIamPolicy({ memberId, effect, resource, context }) {
   if(typeof resource === "undefined" || resource === null ) {
     return new Error( "invalid resource field" );
   }
-  //assemble IAM policy document to return
   return {
     principalId: memberId,
     policyDocument: {
@@ -163,7 +165,6 @@ export function buildIamPolicy({ memberId, effect, resource, context }) {
  * @returns {string}
  */
 function extractBasePath( path ) {
-  //break up the path at the back slashes
   const pathSegments = path.split("/").slice(1);
   return `/${pathSegments[ 0 ]}`;
 } // extractBasePath

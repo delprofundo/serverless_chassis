@@ -33,58 +33,60 @@ const METHODS = {
 };
 
 /**
- * matrix interface, returns
+ * matrix interface, returns the effect clause of a IAM role
  * @param path
  * @param resource
  * @param method
  * @param memberRole
  * @param clientType
- * @returns {Promise<any>}
+ * @returns {Promise<{effect: string}>}
  */
 export async function validateAccess({ path, resource, method, memberRole, clientType }) {
-  return new Promise(( resolve, reject ) => {
-    // this is to switch between users/clients
-    let effectiveEntity;
-
-    if( memberRole ) {
-      effectiveEntity = memberRole;
-    } else if ( clientType ) {
-      effectiveEntity = clientType;
-    } else {
-      console.log( "neither client or user type present, deny access" );
-      return resolve({ effect: "deny" });
-    }
-    let pathObj = permissionsMatrix.find( pathItem => {
-      return pathItem.path === path;
-    });
-    let resourceObj = pathObj.resources.find( resourceItem => {
-      return resourceItem.resource === resource;
-    });
-    if( typeof resourceObj === "undefined" || resourceObj === null ) {
-      return resolve({ effect: "deny" });
-    }
-    let methodObj = resourceObj.methods.find( methodItem => {
-      return methodItem.method === method;
-    });
-    if( typeof methodObj === "undefined" || methodObj === null ) {
-      return resolve({ effect: "deny" });
-    }
-    let deniedUser = methodObj.deny.find(denyItem => {
-      return denyItem === effectiveEntity;
-    });
-    if (deniedUser === effectiveEntity) {
-      return resolve({effect: "deny"});
-    }
-    let permittedUser = methodObj.allow.find( accessItem => {
-      return accessItem === effectiveEntity;
-    });
-    if( typeof permittedUser === "undefined" || permittedUser === null ) {
-      console.log("failed as user type not in allow list");
-      resolve({ effect: "deny" });
-    } else {
-      resolve({ effect: "allow" });
-    }
+  // this is to switch between users/clients
+  console.log( "path", path);
+  console.log( resource );
+  console.log( method );
+  console.log( memberRole );
+  console.log( clientType );
+  let effectiveEntity;
+  if( memberRole ) {
+    effectiveEntity = memberRole;
+  } else if ( clientType ) {
+    effectiveEntity = clientType;
+  } else {
+    console.log( "neither client or user type present, deny access" );
+    return { effect: "deny" };
+  }
+  let pathObj = permissionsMatrix.find( pathItem => {
+    return pathItem.path === path;
   });
+  let resourceObj = pathObj.resources.find( resourceItem => {
+    return resourceItem.resource === resource;
+  });
+  if( typeof resourceObj === "undefined" || resourceObj === null ) {
+    return { effect: "deny" };
+  }
+  let methodObj = resourceObj.methods.find( methodItem => {
+    return methodItem.method === method;
+  });
+  if( typeof methodObj === "undefined" || methodObj === null ) {
+    return { effect: "deny" };
+  }
+  let deniedUser = methodObj.deny.find(denyItem => {
+    return denyItem === effectiveEntity;
+  });
+  if (deniedUser === effectiveEntity) {
+    return {effect: "deny"};
+  }
+  let permittedUser = methodObj.allow.find( accessItem => {
+    return accessItem === effectiveEntity;
+  });
+  if( typeof permittedUser === "undefined" || permittedUser === null ) {
+    console.log("failed as user type not in allow list");
+    return { effect: "deny" };
+  } else {
+    return { effect: "allow" };
+  }
 }
 
 /**
@@ -98,6 +100,58 @@ const permissionsMatrix = [
         resource: "/",
         methods: [
           {
+            method: METHODS.GET,
+            allow: [
+              MEMBER_ROLES.MEMBER,
+              MEMBER_ROLES.SYSTEM,
+              MEMBER_ROLES.PLATFORM_ADMIN
+            ],
+            deny: [
+            ]
+          },
+          {
+            method: METHODS.POST,
+            allow: [
+              MEMBER_ROLES.MEMBER,
+              MEMBER_ROLES.PLATFORM_ADMIN
+            ],
+            deny: [
+            ]
+          }
+        ]
+      },
+      {
+        resource: "/{id}",
+        methods: [
+          {
+            method: METHODS.GET,
+            allow: [
+              MEMBER_ROLES.MEMBER,
+              MEMBER_ROLES.SYSTEM,
+              MEMBER_ROLES.PLATFORM_ADMIN
+            ],
+            deny: [
+            ]
+          }
+        ]
+      },
+      {
+        resource: "/{id}/finalize",
+        methods: [
+          {
+            method: METHODS.PUT,
+            allow: [
+              MEMBER_ROLES.MEMBER
+            ],
+            deny: [
+            ]
+          }
+        ]
+      },
+      {
+        resource: "/echo",
+        methods: [
+          {
             method: METHODS.POST,
             allow: [
               MEMBER_ROLES.MEMBER
@@ -107,32 +161,6 @@ const permissionsMatrix = [
           }
         ]
       },
-      {
-        resource: "/{id}/follow",
-        methods: [
-          {
-            method: METHODS.PUT,
-            allow: [
-              MEMBER_ROLES.MEMBER
-            ],
-            deny: [
-            ]
-          }
-        ]
-      },
-      {
-        resource: "/{id}/unfollow",
-        methods: [
-          {
-            method: METHODS.PUT,
-            allow: [
-              MEMBER_ROLES.MEMBER
-            ],
-            deny: [
-            ]
-          }
-        ]
-      }
     ]
   }
 ];
