@@ -41,7 +41,7 @@ custom:
   webpackIncludeModules: true
   grub: YYYYY-api
   defaultStage: dev
-  basePath: YYYYY
+  basePath: YYYYYs
   jwaPemPath: ${self:custom.local.jwaPemPath}
   kmsKeyPath: ${self:custom.local.kmsKeyPath}
   maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
