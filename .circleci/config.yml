@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  bw-dev-XXXXX-build:
+  bw-dev-YYYYY-build:
     docker:
       - image: rhinogram/node-awscli
     working_directory: ~/repo
@@ -42,7 +42,7 @@ workflows:
   version: 2
   bw-deploy-to-dev:
     jobs:
-    - bw-dev-XXXXX-build:
+    - bw-dev-YYYYY-build:
         context: bw-aws
         filters:
           branches:

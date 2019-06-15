@@ -29,7 +29,7 @@ the following are all one off configurations, ie: once this has been performed f
 
 5) [add user for cloudwatch and apig](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/)
 
-once these have been done search for XXXXX and PROJECTNAME within package.json, serveress.yml, configurators and environmentSpecific.yml and replace with appropriate values.
+once these have been done search for YYYYY and PROJECTNAME within package.json, serveress.yml, configurators and environmentSpecific.yml and replace with appropriate values.
 
 this chassis has served me well but is customised slightly for production projects. please feel free to ask questions or propose improvements via pull or email.
 

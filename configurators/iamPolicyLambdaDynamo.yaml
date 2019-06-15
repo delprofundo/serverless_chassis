@@ -2,7 +2,7 @@
 
 Type: AWS::IAM::Policy
 Properties:   # add service specific name
-  PolicyName: com-XXXXXX-auth-dynamo
+  PolicyName: com-YYYYY-auth-dynamo
   PolicyDocument:
     Version: "2012-10-17"
     Statement:

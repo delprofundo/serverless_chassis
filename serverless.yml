@@ -1,4 +1,4 @@
-service: XXXXX-service
+service: YYYYY-service
 frameworkVersion:  ">=1.43.0 <2.0.0"
 
 provider:
@@ -39,9 +39,9 @@ custom:
   #  cleanFolders: false
   local: ${file(./environmentSpecific.yml)} #a file for deployment specific values, can be supplied by Param Store
   webpackIncludeModules: true
-  grub: XXXXX-api
+  grub: YYYYY-api
   defaultStage: dev
-  basePath: XXXXX
+  basePath: YYYYY
   jwaPemPath: ${self:custom.local.jwaPemPath}
   kmsKeyPath: ${self:custom.local.kmsKeyPath}
   maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
@@ -63,7 +63,7 @@ functions:
     name: ${self:provider.stage}-${self:custom.grub}-authorize
     handler: sec/authorize.handler
     description: must use US spelling for authorize function.
-  pingXXXXX:
+  pingYYYYY:
     handler: handler.ping
     name: ${self:provider.stage}-${self:custom.grub}-ping
     description: a simple payload ping GET test
@@ -72,7 +72,7 @@ functions:
         path: /ping
         method: get
         cors: true
-  echoXXXXX:
+  echoYYYYY:
     handler: handler.echo
     name: ${ self:provider.stage}-${self:custom.grub}-echo
     description: a simple payload echo POST test
