@@ -4,26 +4,26 @@
  * bruno@hypermedia.tech
  * @module YYYYY/ServiceHandler
  */
-// const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY;
-// const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET;
+import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+import * as logger from "log-winston-aws-level";
+import * as AWSXRay from "aws-xray-sdk-core";
 import { RESifySuccess, RESifyErr } from "./lib/awsHelpers/RESifier.representor.library";
-
-const { DEPLOY_REGION } = process.env;
+import * as util from "./lib/util.server.library";
 
 // ADD LIB's HERE
 
-const AWSXRay = require("aws-xray-sdk-core");
-const AWS = AWSXRay.captureAWS(require("aws-sdk"));
-const util = require("./lib/util.server.library");
+const { DEPLOY_REGION } = process.env;
+
+AWS.config.update({ region: DEPLOY_REGION });
+AWS = AWSXRay.captureAWS(AWS);
 // declare the DB here and inject it to all calls that require it
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient(); // eslint-disable-line  @typescript-eslint/no-unused-vars
 
 // EXPORTED FUNCTIONS
 /**
  * ping - simple GET test
- * @param event
  */
-export const ping = async event => {
+export const ping = async () => {
     try {
         return RESifySuccess(await util.ping());
     } catch (err) {
