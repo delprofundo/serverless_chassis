@@ -2,11 +2,17 @@
   "compilerOptions": {
     "lib": ["es2017"],
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
-    "outDir": "lib"
+    "outDir": "lib",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
-  "exclude": ["node_modules"]
+  "types": [
+    "node"
+  ]
 }

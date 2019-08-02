@@ -4,26 +4,27 @@
  * bruno@hypermedia.tech
  * @module YYYYY/ServiceHandler
  */
-import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+import * as AWSRoot from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import * as logger from "log-winston-aws-level";
 import * as AWSXRay from "aws-xray-sdk-core";
 import { RESifySuccess, RESifyErr } from "./lib/awsHelpers/RESifier.representor.library";
 import * as util from "./lib/util.server.library";
+import { APIGatewayProxyHandler } from "aws-lambda";
 
 // ADD LIB's HERE
 
 const { DEPLOY_REGION } = process.env;
 
-AWS.config.update({ region: DEPLOY_REGION });
-AWS = AWSXRay.captureAWS(AWS);
+AWSRoot.config.update({ region: DEPLOY_REGION });
+const AWS = AWSXRay.captureAWS( AWSRoot );
 // declare the DB here and inject it to all calls that require it
-const db = new AWS.DynamoDB.DocumentClient(); // eslint-disable-line  @typescript-eslint/no-unused-vars
+const db = new AWS.DynamoDB.DocumentClient();
 
 // EXPORTED FUNCTIONS
 /**
  * ping - simple GET test
  */
-export const ping = async () => {
+export const ping: APIGatewayProxyHandler = async () => {
     try {
         return RESifySuccess(await util.ping());
     } catch (err) {
@@ -36,7 +37,7 @@ export const ping = async () => {
  * echo - simple POST test
  * @param event
  */
-export const echo = async event => {
+export const echo: APIGatewayProxyHandler = async ( event ) => {
     try {
         return RESifySuccess(await util.echo(event.body));
     } catch (err) {

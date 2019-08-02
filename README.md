@@ -47,7 +47,7 @@ this is where serverless components like tables, streams and bindings should be 
 
 #### lib folder
 
-this is where I structure the actual code for the service, this code is usually referenced from the handler.js file tho some uses may be referred to directly by the serverless.yml config.
+this is where I structure the actual code for the service, this code is usually referenced from the handler.ts file tho some uses may be referred to directly by the serverless.yml config.
 
 i prefer to create subfolders here for complex domain specific functionality such as factory modules and keep general server interfaces etc in the root.
 
