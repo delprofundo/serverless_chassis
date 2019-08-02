@@ -26,45 +26,45 @@ const ssm = new AWS.SSM({ apiVersion: "2014-11-06" });
  * @returns {Promise<{maxTokenExpiry: *, systemMemberId: *, jwaPem: *}>}
  */
 const getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }) => {
-    const resultArr = await Promise.all([
-        await getSecretValue(jwaPem, ssm),
-        await getValue(max, ssm),
-        await getSecretValue(systemMemberId, ssm)
-    ]);
-    return {
-        jwaPem: resultArr[0],
-        maxTokenExpiry: resultArr[1],
-        systemMemberId: resultArr[2]
-    };
+  const resultArr = await Promise.all([
+    await getSecretValue(jwaPem, ssm),
+    await getValue(max, ssm),
+    await getSecretValue(systemMemberId, ssm)
+  ]);
+  return {
+    jwaPem: resultArr[0],
+    maxTokenExpiry: resultArr[1],
+    systemMemberId: resultArr[2]
+  };
 }; // end getAuthenticationParametersNew
 
 const handler = async () => {
-    let generatedJwe;
-    let authParams;
-    try {
-        authParams = await getAuthenticationParameters({
-            max: MAX_TOKEN_EXPIRY_PATH,
-            systemMemberId: SYSTEM_MEMBER_ID_PATH,
-            jwaPem: JWA_PEM_PATH
-        });
-    } catch (err) {
-        throw err;
-    }
-    const { maxTokenExpiry, jwaPem, systemMemberId } = authParams;
-    const itemToEncrypt = {
-        memberId: systemMemberId,
-        role: "SYSTEM",
-        expiry: moment()
-            .add(maxTokenExpiry, "minutes")
-            .unix()
-    };
-    try {
-        generatedJwe = await createJWE(itemToEncrypt, jwaPem);
-    } catch (err) {
-        logger.error("error in generate JWE try block : ", err);
-        throw err;
-    }
-    return generatedJwe;
+  let generatedJwe;
+  let authParams;
+  try {
+    authParams = await getAuthenticationParameters({
+      max: MAX_TOKEN_EXPIRY_PATH,
+      systemMemberId: SYSTEM_MEMBER_ID_PATH,
+      jwaPem: JWA_PEM_PATH
+    });
+  } catch (err) {
+    throw err;
+  }
+  const { maxTokenExpiry, jwaPem, systemMemberId } = authParams;
+  const itemToEncrypt = {
+    memberId: systemMemberId,
+    role: "SYSTEM",
+    expiry: moment()
+      .add(maxTokenExpiry, "minutes")
+      .unix()
+  };
+  try {
+    generatedJwe = await createJWE(itemToEncrypt, jwaPem);
+  } catch (err) {
+    logger.error("error in generate JWE try block : ", err);
+    throw err;
+  }
+  return generatedJwe;
 }; // end handler
 
 export default handler;

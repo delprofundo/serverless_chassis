@@ -9,8 +9,8 @@
  * simple ping endpoint
  * @returns {Promise<{message: string}>}
  */
-export const ping = async () => {
-    return { message: "PONG" };
+export const ping = async (): Promise<Object> => {
+  return { message: "PONG" };
 }; // end ping
 
 /**
@@ -18,10 +18,10 @@ export const ping = async () => {
  * @param messageObject
  * @returns {Promise<any>}
  */
-export const echo = async messageObject => {
-    try {
-        return JSON.parse(messageObject);
-    } catch (err) {
-        throw err;
-    }
+export const echo = async( messageObject ): Promise<Object> => {
+  try {
+    return JSON.parse( messageObject );
+  } catch( err ) {
+    throw err;
+  }
 }; // end echo

@@ -8,8 +8,17 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2018,
+    project: "./tsconfig.json",
     sourceType: "module",
   },
+  plugins: [
+    "functional"
+  ],
   rules: {
+    "no-var": 2,
+    "functional/no-this": 2,
+    "functional/no-class": 2,
+    //"functional/immutable-data": 1,
+    "functional/no-method-signature": 1
   }
 };
