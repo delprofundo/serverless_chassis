@@ -58,6 +58,7 @@
     "aws-xray-sdk-core": "2.3.4",
     "jwe-handler": "1.1.0",
     "log-winston-aws-level": "1.11.0",
+    "moment": "2.24.0",
     "request": "2.88.0",
     "request-promise-native": "1.0.7",
     "source-map-support": "0.5.13",
