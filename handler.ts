@@ -1,24 +1,18 @@
-/**
- * service handler
- * delprofundo (@brunowatt)
- * bruno@hypermedia.tech
- * @module YYYYY/ServiceHandler
- */
-import * as AWSRoot from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+// import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import * as logger from "log-winston-aws-level";
-import * as AWSXRay from "aws-xray-sdk-core";
+import { APIGatewayProxyHandler } from "aws-lambda"; // eslint-disable-line import/no-extraneous-dependencies
+// import * as AWSXRay from "aws-xray-sdk-core";
 import { RESifySuccess, RESifyErr } from "./lib/awsHelpers/RESifier.representor.library";
 import * as util from "./lib/util.server.library";
-import { APIGatewayProxyHandler } from "aws-lambda";
 
 // ADD LIB's HERE
 
-const { DEPLOY_REGION } = process.env;
+// const { DEPLOY_REGION } = process.env;
 
-AWSRoot.config.update({ region: DEPLOY_REGION });
-const AWS = AWSXRay.captureAWS( AWSRoot );
+// AWSRoot.config.update({ region: DEPLOY_REGION });
+// const AWS = AWSXRay.captureAWS( AWSRoot );
 // declare the DB here and inject it to all calls that require it
-const db = new AWS.DynamoDB.DocumentClient();
+// const db = new AWS.DynamoDB.DocumentClient();
 
 // EXPORTED FUNCTIONS
 /**

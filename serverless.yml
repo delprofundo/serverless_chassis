@@ -11,7 +11,7 @@ provider:
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
-    JWA_PEM_PATH: ${self:custom.jwaPemPath}
+    #JWA_PEM_PATH: ${self:custom.jwaPemPath}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -42,7 +42,7 @@ custom:
   grub: YYYYY-api
   defaultStage: dev
   basePath: YYYYYs
-  jwaPemPath: ${self:custom.local.jwaPemPath}
+  #jwaPemPath: ${self:custom.local.jwaPemPath}
   kmsKeyPath: ${self:custom.local.kmsKeyPath}
   maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
   systemMemberIdPath: ${self:custom.local.systemMemberIdPath}
@@ -88,10 +88,7 @@ resources:
     __deployment__:
       Properties:
         Description: Deployment alias for resources that depend on deployment id
-    IamPolicyLambdaDynamo:
-      $ref: ./configurators/iamPolicyLambdaDynamo.yaml
-    PathMapping:
-      $ref: ./configurators/pathMapping.yaml
-    ApiGatewayStage:
-      $ref: ./configurators/apiGatewayStage.yaml
+    ApiGatewayStage: ${file(configurators/apiGatewayStage.yaml)}
+    IamPolicyLambdaDynamo: ${file(configurators/iamPolicyLambdaDynamo.yaml)}
+    PathMapping: ${file(configurators/pathMapping.yaml)}
 

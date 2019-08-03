@@ -10,7 +10,8 @@
     "test:cover": "cross-env NODE_ENV=test nyc mocha --quiet --require should 'test/unit/**/**.spec.js'",
     "test:e2e": "mocha --quiet --require should --timeout 10000 'test/e2e/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
-    "lint:js": "eslint ./ --fix"
+    "lint:js": "eslint ./ --fix",
+    "lint:ts": "eslint ./ --fix"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,7 @@
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-YYYYY-service#readme",
   "devDependencies": {
     "@types/assert": "^1.4.3",
-    "@types/aws-lambda": "8.10.31",
+    "@types/aws-lambda": "^8.10.31",
     "@types/aws-sdk": "^2.7.0",
     "@types/chai": "^4.1.7",
     "@types/chai-as-promised": "^7.1.1",
@@ -40,10 +41,12 @@
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
     "assert": "2.0.0",
+    "aws-lambda": "^0.1.2",
     "aws-sdk": "2.503.0",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-things": "0.2.0",
+    "copy-webpack-plugin": "^5.0.4",
     "cross-env": "5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-typescript": "4.0.1",
@@ -65,8 +68,7 @@
     "serverless-webpack": "5.3.1",
     "should": "13.2.3",
     "ts-loader": "6.0.4",
-    "typescript": "3.5.3",
-    "webpack": "4.39.0",
+    "webpack": "^4.39.1",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {

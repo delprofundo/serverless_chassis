@@ -7,7 +7,7 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
-    "outDir": "lib",
+    "outDir": "bld",
     "typeRoots": [
       "node_modules/@types"
     ]

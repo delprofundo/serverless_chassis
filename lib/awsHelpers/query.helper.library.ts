@@ -30,7 +30,9 @@ export const isAcceptablePageLimit = (candidateLimit, pageParams) => {
  */
 export const createBaseQueryParameters = (table, queryStringParameters, pageParams) => {
   const baseQueryParameterObject = {
-    TableName: table
+    TableName: table,
+    ExclusiveStartKey: undefined,
+    Limit: undefined
   };
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "lek")) {
     baseQueryParameterObject.ExclusiveStartKey = JSON.parse(queryStringParameters.lek);
