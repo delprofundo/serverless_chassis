@@ -6,11 +6,11 @@
  * bruno@hypermedia.tech
  * @module s3/helper
  */
-import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+import * as AWS_base from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 
 import * as AWSXRay from "aws-xray-sdk-core";
 // eslint-disable-line import/no-extraneous-dependencies
-AWS = AWSXRay.captureAWS(AWS);
+const AWS = AWSXRay.captureAWS(AWS_base);
 
 const { DEPLOY_REGION } = process.env;
 const s3 = new AWS.S3({ region: DEPLOY_REGION, signatureVersion: "v4" });

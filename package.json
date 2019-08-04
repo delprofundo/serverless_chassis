@@ -2,12 +2,12 @@
   "name": "PROJECTNAME_YYYYY_service_api",
   "version": "0.1.0",
   "description": "YYYYY Service API Interface",
-  "main": "handler.ts",
+  "main": "src/handler.ts",
   "scripts": {
     "deploy:dev": "node ./node_modules/serverless/bin/serverless deploy -v --stage dev --region us-east-1",
     "deploy:uat": "node ./node_modules/serverless/bin/serverless deploy -v --stage uat --region ap-southeast-2",
-    "test:unit": "mocha --quiet --require should 'test/unit/**/**.spec.js'",
-    "test:cover": "cross-env NODE_ENV=test nyc mocha --quiet --require should 'test/unit/**/**.spec.js'",
+    "test:unit": "mocha",
+    "test:cover": "nyc mocha",
     "test:e2e": "mocha --quiet --require should --timeout 10000 'test/e2e/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
     "lint:js": "eslint ./ --fix",
@@ -43,7 +43,7 @@
     "assert": "2.0.0",
     "aws-lambda": "^0.1.2",
     "aws-sdk": "2.503.0",
-    "chai": "4.2.0",
+    "chai": "^4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-things": "0.2.0",
     "copy-webpack-plugin": "^5.0.4",
@@ -57,7 +57,7 @@
     "istanbul": "0.4.5",
     "js-yaml": "3.13.1",
     "jsdoc": "3.6.3",
-    "mocha": "6.2.0",
+    "mocha": "^6.2.0",
     "nyc": "14.1.1",
     "prettier": "1.18.2",
     "rewire": "4.0.1",
@@ -68,6 +68,7 @@
     "serverless-webpack": "5.3.1",
     "should": "13.2.3",
     "ts-loader": "6.0.4",
+    "ts-node": "^8.3.0",
     "webpack": "^4.39.1",
     "webpack-node-externals": "1.7.2"
   },
@@ -86,11 +87,26 @@
     "validation-tools": "1.10.1"
   },
   "nyc": {
+    "all": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "excludee": [
+      "src/common"
+    ],
     "reporter": [
       "lcov",
-      "text"
+      "text-summary",
+      "html"
     ],
-    "sourceMap": false,
-    "instrument": false
+    "require": [
+      "ts-node/register"
+    ],
+    "sourceMap": true,
+    "instrument": true
   }
 }

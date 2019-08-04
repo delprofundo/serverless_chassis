@@ -5,7 +5,7 @@
  * bruno@hypermedia.tech
  ******************************************* */
 import * as logger from "log-winston-aws-level";
-import * as moment from "moment";
+import moment from "moment";
 import { createJWE } from "jwe-handler";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import { getSecretValue, getValue } from "../lib/awsHelpers/general.helper.library";

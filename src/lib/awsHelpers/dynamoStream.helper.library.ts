@@ -20,7 +20,8 @@ const processIndividualDynamoRecord = dynamoRecord => {
   const response = {
     newRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.NewImage }),
     oldRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.OldImage }),
-    streamEventName: dynamoRecord.eventName
+    streamEventName: dynamoRecord.eventName,
+    delta: undefined
   };
   if (dynamoRecord.eventName === "MODIFY") {
     const diff = extractDynamoStreamDelta(dynamoRecord);

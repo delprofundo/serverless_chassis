@@ -1,5 +1,0 @@
---recursive
---reporter spec
---quiet
---require should
---require babel-core/register

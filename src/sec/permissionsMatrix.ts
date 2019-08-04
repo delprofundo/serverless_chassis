@@ -7,7 +7,9 @@
  * bruno@hypermedia.tech
  ******************************************* */
 import * as logger from "log-winston-aws-level";
-
+import {
+  PermissionCheckParameters
+} from "../common/types";
 const { SERVICE_BASE_PATH } = process.env;
 
 /* const CLIENT_TYPES = {
@@ -37,7 +39,7 @@ const METHODS = {
 /**
  * This array stores an object for each API path with nested entries allowing simple lookup of permissions
  */
-const permissionsMatrix = [
+const permMatrix = [
   {
     path: `/${SERVICE_BASE_PATH}`,
     resources: [
@@ -99,7 +101,7 @@ const permissionsMatrix = [
  * @param clientType
  * @returns {Promise<{effect: string}>}
  */
-export default async function validateAccess({ path, resource, method, memberRole, clientType }) {
+export default async function validateAccess({ path, resource, method, memberRole, clientType }: PermissionCheckParameters ) {
   // this is to switch between users/clients
   let effectiveEntity;
   if (memberRole) {
@@ -110,7 +112,7 @@ export default async function validateAccess({ path, resource, method, memberRol
     logger.info("neither client or user type present, deny access");
     return { effect: "deny" };
   }
-  const pathObj = permissionsMatrix.find(pathItem => {
+  const pathObj = permMatrix.find(pathItem => {
     return pathItem.path === path;
   });
   const resourceObj = pathObj.resources.find(resourceItem => {

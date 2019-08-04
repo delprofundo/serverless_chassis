@@ -5,11 +5,15 @@
  * bruno@hypermedia.tech
  * @module sec/authorize
  */
+import {
+  IamPolicyParameters,
+  PermissionCheckParameters
+} from "../common/types";
 import * as logger from "log-winston-aws-level";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
-import * as moment from "moment";
+import moment from "moment";
 import { decryptJWE } from "jwe-handler";
-import { getSecretValue, getValue } from "../lib/awsHelpers/general.helper.library";
+import { getAuthenticationParameters } from "../lib/awsHelpers/general.helper.library";
 import * as permissionsMatrix from "./permissionsMatrix";
 
 const { DEPLOY_REGION } = process.env;
@@ -21,26 +25,6 @@ AWS.config.update({ region: DEPLOY_REGION });
 const ssm = new AWS.SSM({ apiVersion: "2014-11-06" });
 
 /**
- * getAuthenticationParameters will pull all the needed security parameters from ssm
- * @param max
- * @param systemMemberId
- * @param jwaPem
- * @returns {Promise<{maxTokenExpiry: *, systemMemberId: *, jwaPem: *}>}
- */
-const getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }) => {
-  const resultArr = await Promise.all([
-    await getSecretValue(jwaPem, ssm),
-    await getValue(max, ssm),
-    await getSecretValue(systemMemberId, ssm)
-  ]);
-  return {
-    jwaPem: resultArr[0],
-    maxTokenExpiry: resultArr[1],
-    systemMemberId: resultArr[2]
-  };
-}; // end getAuthenticationParametersNew
-
-/**
  *  Function that creates an API Gateway policy document from validated input
  * @param memberId
  * @param effect
@@ -48,7 +32,7 @@ const getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }) => {
  * @param context
  * @returns {Error|{policyDocument: {Version: string, Statement: {Action: string[], Resource: *[], Effect: *}[]}, context: *, principalId: *}}
  */
-export function buildIamPolicy({ memberId, effect, resource, context }) {
+export function buildIamPolicy({ memberId, effect, resource, context }: IamPolicyParameters ) {
   // test all input is valid and reject if not
   if (typeof memberId === "undefined" || memberId === null) {
     return new Error("memberId required to identify user or client");
@@ -81,7 +65,7 @@ export function buildIamPolicy({ memberId, effect, resource, context }) {
  * @param path
  * @returns {string}
  */
-function extractBasePath(path) {
+function extractBasePath( path: string ) : string {
   const pathSegments = path.split("/").slice(1);
   return `/${pathSegments[0]}`;
 } // extractBasePath
@@ -92,7 +76,7 @@ function extractBasePath(path) {
  * @param tokenExpiryUnixTime
  * @returns {boolean}
  */
-function hasTokenExpired(tokenExpiryUnixTime) {
+function hasTokenExpired( tokenExpiryUnixTime : number  ) : boolean {
   return moment().unix() >= tokenExpiryUnixTime;
 } // end hasTokenExpired
 
@@ -103,7 +87,7 @@ function hasTokenExpired(tokenExpiryUnixTime) {
  * @param context
  * @returns {Promise<void>}
  */
-async function authenticateIntegratedUser(authParams, event, context) {
+async function authenticateIntegratedUser(authParams, event, context ): Promise<any> {
   logger.info("inside authenticateIntegratedUser", authParams, event);
   const { jwaPem } = authParams;
   const clientToken = event.headers.Authorization;
@@ -119,14 +103,14 @@ async function authenticateIntegratedUser(authParams, event, context) {
     logger.info("token has expired, auth failed");
     context.fail("Unauthorized");
   }
-  const permissionCheckParams = {
+  const permissionCheckParams: PermissionCheckParameters = {
     path: extractBasePath(event.path),
     resource: event.resource,
     method: event.httpMethod,
     memberRole: localClientRecord.role
   };
   try {
-    resultEffect = await permissionsMatrix.validateAccess(permissionCheckParams);
+    resultEffect = await permissionsMatrix.default( permissionCheckParams );
     return await buildIamPolicy({
       memberId: localClientRecord.memberId,
       effect: resultEffect.effect,
@@ -141,11 +125,11 @@ async function authenticateIntegratedUser(authParams, event, context) {
 
 const handler = async (event, context) => {
   const authParams = await getAuthenticationParameters({
-    max: MAX_TOKEN_EXPIRY_PATH,
+    maxTokenExpiry: MAX_TOKEN_EXPIRY_PATH,
     systemMemberId: SYSTEM_MEMBER_ID_PATH,
     /* userPoolId: USER_POOL_ID_PATH, */
     jwaPem: JWA_PEM_PATH
-  });
+  }, ssm );
   return authenticateIntegratedUser(authParams, event, context);
 }; // end handler
 
