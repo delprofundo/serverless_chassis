@@ -8,7 +8,7 @@
 import {
   IIamPolicyParameters,
   IPermissionCheckParameters
-} from "../common/types";
+} from "../interface/types";
 import * as logger from "log-winston-aws-level";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import moment from "moment";

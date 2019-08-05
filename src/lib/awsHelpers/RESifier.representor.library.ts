@@ -4,7 +4,7 @@
  */
 import {
   IHTTPResponse
-} from "../../common/types";
+} from "../../interface/types";
 
 /**
  * Basic success response wrapper.

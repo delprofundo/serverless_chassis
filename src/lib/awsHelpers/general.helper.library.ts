@@ -1,7 +1,7 @@
 import {
   IAsyncResponse,
   IAuthenticationParameters,
-} from "../../common/types";
+} from "../../interface/types";
 
 import { SSM } from "aws-sdk"
 import {v4String} from "uuid/interfaces";
