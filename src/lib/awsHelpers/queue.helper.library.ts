@@ -6,15 +6,16 @@
  * bruno@hypermedia.tech
  * @module dynamodb/queryHelper
  */
-import * as logger from "log-winston-aws-level";
+import logger from "log-winston-aws-level";
 import { unstring } from "./general.helper.library";
+import { DynamoDB, SQS } from "aws-sdk";
 
 /**
  * parses a SQS queue event
  * @param incomingQueueEvent
  * @returns {{queueEvent}}
  */
-const extractQueueEvent = incomingQueueEvent => {
+const extractQueueEvent = ( incomingQueueEvent : any ) : object => {
   return {
     ...unstring(incomingQueueEvent.body),
     queueMessageId: incomingQueueEvent.messageId,
@@ -29,14 +30,12 @@ const extractQueueEvent = incomingQueueEvent => {
  * @param queue
  * @returns {Promise<void>}
  */
-export const pushToQueue = async (body, queueUrl, queue) => {
+export const pushToQueue = async (body: object, queueUrl: string, queue : SQS ) : Promise<SQS.SendMessageResult> => {
   try {
-    return queue
-      .sendMessage({
+    return queue.sendMessage({
         MessageBody: JSON.stringify(body),
         QueueUrl: queueUrl
-      })
-      .promise();
+      }).promise();
   } catch (err) {
     throw err;
   }
@@ -44,13 +43,13 @@ export const pushToQueue = async (body, queueUrl, queue) => {
 
 /**
  * HOF pushing messages onto service stream
- * @param streamEvents
+ * @param queueEvents
  * @param eventProcessorFunction
  * @param target
  * @returns {Promise<[any, any, any, any, any, any, any, any, any, any]>}
  */
-export const queueEventPromisifier = async (streamEvents, eventProcessorFunction, target) => {
-  const parsedEvents = streamEvents.map(event => {
+export const queueEventPromisifier = async (queueEvents : Array<object>, eventProcessorFunction : Function, target : SQS | DynamoDB ) : Promise<any> => {
+  const parsedEvents = queueEvents.map(event => {
     return extractQueueEvent(event);
   });
   try {
