@@ -10,39 +10,39 @@ import { v4String } from "uuid/interfaces";
 /*
   Common Communication Types
  */
-export interface AsyncResponse {
+export interface IAsyncResponse {
     result: string,
     recordId: v4String,
     recordType: string,
     responseMessage?: string,
     traceId?: string
-} // end AsyncResponse interface
+} // end IAsyncResponse interface
 /*
   Authentication Types
  */
-export interface AuthenticationParameters {
+export interface IAuthenticationParameters {
     maxTokenExpiry: string,
     jwaPem: string,
     userPoolId?: string,
     systemMemberId?: string
-} // end AuthenticationParameters
+} // end IAuthenticationParameters
 
-interface FlexibleObject {
+interface IFlexibleObject {
     key: string,
     value: any
-} // end FlexibleObject Interface
+} // end IFlexibleObject Interface
 
-export interface PermissionCheckParameters {
+export interface IPermissionCheckParameters {
     path: string,
     resource: string,
     method: string,
     memberRole?: string,
     clientType?: string
-} // end PermissionCheckParameters Interface
+} // end IPermissionCheckParameters Interface
 
-export interface IamPolicyParameters {
+export interface IIamPolicyParameters {
     memberId: v4String,
     effect: string,
     resource: string,
-    context?: FlexibleObject
-} // end IamPolicyParameters Interface
+    context?: IFlexibleObject
+} // end IIamPolicyParameters Interface

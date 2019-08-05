@@ -6,8 +6,8 @@
  * @module sec/authorize
  */
 import {
-  IamPolicyParameters,
-  PermissionCheckParameters
+  IIamPolicyParameters,
+  IPermissionCheckParameters
 } from "../common/types";
 import * as logger from "log-winston-aws-level";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
@@ -32,7 +32,7 @@ const ssm = new AWS.SSM({ apiVersion: "2014-11-06" });
  * @param context
  * @returns {Error|{policyDocument: {Version: string, Statement: {Action: string[], Resource: *[], Effect: *}[]}, context: *, principalId: *}}
  */
-export function buildIamPolicy({ memberId, effect, resource, context }: IamPolicyParameters ) {
+export function buildIamPolicy({ memberId, effect, resource, context }: IIamPolicyParameters ) {
   // test all input is valid and reject if not
   if (typeof memberId === "undefined" || memberId === null) {
     return new Error("memberId required to identify user or client");
@@ -103,7 +103,7 @@ async function authenticateIntegratedUser(authParams, event, context ): Promise<
     logger.info("token has expired, auth failed");
     context.fail("Unauthorized");
   }
-  const permissionCheckParams: PermissionCheckParameters = {
+  const permissionCheckParams: IPermissionCheckParameters = {
     path: extractBasePath(event.path),
     resource: event.resource,
     method: event.httpMethod,
