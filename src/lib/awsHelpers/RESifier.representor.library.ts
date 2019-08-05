@@ -2,6 +2,9 @@
  * @module member/Representor
  * @type {function(*=, *=): {body: string, statusCode: number, headers: {"Access-Control-Allow-Origin": string, "Access-Control-Allow-Credentials": boolean}}}
  */
+import {
+  IHTTPResponse
+} from "../../common/types";
 
 /**
  * Basic success response wrapper.
@@ -10,7 +13,7 @@
  * @param statusCode
  * @returns {{body: string, statusCode: number, headers: {"Access-Control-Allow-Origin": string, "Access-Control-Allow-Credentials": boolean}}}
  */
-export const RESifySuccess = (candidateObject, statusCode = 200) => {
+export const RESifySuccess = (candidateObject: object, statusCode : number = 200 ) : IHTTPResponse => {
   return {
     body: JSON.stringify(candidateObject),
     statusCode,
@@ -28,7 +31,7 @@ export const RESifySuccess = (candidateObject, statusCode = 200) => {
  * @param statusCode
  * @returns {{body: string, statusCode: *, headers: {"Access-Control-Allow-Origin": string, "Access-Control-Allow-Credentials": boolean}}}
  */
-export const RESifyErr = (errorResponse, statusCode = 500) => {
+export const RESifyErr = (errorResponse: Error, statusCode: number = 500): IHTTPResponse => {
   return {
     body: JSON.stringify({ message: errorResponse.message }),
     statusCode,

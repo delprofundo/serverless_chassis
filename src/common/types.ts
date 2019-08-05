@@ -17,6 +17,12 @@ export interface IAsyncResponse {
     responseMessage?: string,
     traceId?: string
 } // end IAsyncResponse interface
+
+export interface IHTTPResponse {
+    statusCode: number,
+    body: string,
+    headers?: object
+}
 /*
   Authentication Types
  */
