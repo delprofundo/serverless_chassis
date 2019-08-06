@@ -7,6 +7,7 @@
 import * as logger from "log-winston-aws-level";
 import moment from "moment";
 import { createJWE } from "jwe-handler";
+import { JWE } from "node-jose";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import { getSecretValue, getValue } from "../lib/awsHelpers/authentication.helper.library";
 import { AuthenticationParameters } from "../interface/types";
