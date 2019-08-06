@@ -7,9 +7,8 @@
  * bruno@hypermedia.tech
  ******************************************* */
 import * as logger from "log-winston-aws-level";
-import {
-  IPermissionCheckParameters
-} from "../interface/types";
+import { IPermissionCheckParameters } from "../interface/types";
+
 const { SERVICE_BASE_PATH } = process.env;
 
 /* const CLIENT_TYPES = {
@@ -101,7 +100,13 @@ const permMatrix = [
  * @param clientType
  * @returns {Promise<{effect: string}>}
  */
-export default async function validateAccess({ path, resource, method, memberRole, clientType }: IPermissionCheckParameters ) {
+export default async function validateAccess({
+  path,
+  resource,
+  method,
+  memberRole,
+  clientType
+}: IPermissionCheckParameters) {
   // this is to switch between users/clients
   let effectiveEntity;
   if (memberRole) {

@@ -5,14 +5,11 @@
  * bruno@hypermedia.tech
  * @module sec/authorize
  */
-import {
-  IIamPolicyParameters,
-  IPermissionCheckParameters
-} from "../interface/types";
 import * as logger from "log-winston-aws-level";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import moment from "moment";
 import { decryptJWE } from "jwe-handler";
+import { IIamPolicyParameters, IPermissionCheckParameters } from "../interface/types";
 import { getAuthenticationParameters } from "../lib/awsHelpers/authentication.helper.library";
 import * as permissionsMatrix from "./permissionsMatrix";
 
@@ -32,7 +29,7 @@ const ssm = new AWS.SSM({ apiVersion: "2014-11-06" });
  * @param context
  * @returns {Error|{policyDocument: {Version: string, Statement: {Action: string[], Resource: *[], Effect: *}[]}, context: *, principalId: *}}
  */
-export function buildIamPolicy({ memberId, effect, resource, context }: IIamPolicyParameters ) {
+export function buildIamPolicy({ memberId, effect, resource, context }: IIamPolicyParameters) {
   // test all input is valid and reject if not
   if (typeof memberId === "undefined" || memberId === null) {
     return new Error("memberId required to identify user or client");
@@ -65,7 +62,7 @@ export function buildIamPolicy({ memberId, effect, resource, context }: IIamPoli
  * @param path
  * @returns {string}
  */
-function extractBasePath( path: string ) : string {
+function extractBasePath(path: string): string {
   const pathSegments = path.split("/").slice(1);
   return `/${pathSegments[0]}`;
 } // extractBasePath
@@ -76,7 +73,7 @@ function extractBasePath( path: string ) : string {
  * @param tokenExpiryUnixTime
  * @returns {boolean}
  */
-function hasTokenExpired( tokenExpiryUnixTime : number  ) : boolean {
+function hasTokenExpired(tokenExpiryUnixTime: number): boolean {
   return moment().unix() >= tokenExpiryUnixTime;
 } // end hasTokenExpired
 
@@ -87,7 +84,7 @@ function hasTokenExpired( tokenExpiryUnixTime : number  ) : boolean {
  * @param context
  * @returns {Promise<void>}
  */
-async function authenticateIntegratedUser(authParams, event, context ): Promise<any> {
+async function authenticateIntegratedUser(authParams, event, context): Promise<any> {
   logger.info("inside authenticateIntegratedUser", authParams, event);
   const { jwaPem } = authParams;
   const clientToken = event.headers.Authorization;
@@ -110,7 +107,7 @@ async function authenticateIntegratedUser(authParams, event, context ): Promise<
     memberRole: localClientRecord.role
   };
   try {
-    resultEffect = await permissionsMatrix.default( permissionCheckParams );
+    resultEffect = await permissionsMatrix.default(permissionCheckParams);
     return await buildIamPolicy({
       memberId: localClientRecord.memberId,
       effect: resultEffect.effect,
@@ -124,12 +121,15 @@ async function authenticateIntegratedUser(authParams, event, context ): Promise<
 } // end authenticateIntegratedUser
 
 const handler = async (event, context) => {
-  const authParams = await getAuthenticationParameters({
-    maxTokenExpiry: MAX_TOKEN_EXPIRY_PATH,
-    systemMemberId: SYSTEM_MEMBER_ID_PATH,
-    /* userPoolId: USER_POOL_ID_PATH, */
-    jwaPem: JWA_PEM_PATH
-  }, ssm );
+  const authParams = await getAuthenticationParameters(
+    {
+      maxTokenExpiry: MAX_TOKEN_EXPIRY_PATH,
+      systemMemberId: SYSTEM_MEMBER_ID_PATH,
+      /* userPoolId: USER_POOL_ID_PATH, */
+      jwaPem: JWA_PEM_PATH
+    },
+    ssm
+  );
   return authenticateIntegratedUser(authParams, event, context);
 }; // end handler
 

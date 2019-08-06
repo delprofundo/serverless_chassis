@@ -11,44 +11,44 @@ import { v4String } from "uuid/interfaces";
   Common Communication Types
  */
 export interface IAsyncResponse {
-    result: string,
-    recordId: v4String,
-    recordType: string,
-    responseMessage?: string,
-    traceId?: string
+  result: string;
+  recordId: v4String;
+  recordType: string;
+  responseMessage?: string;
+  traceId?: string;
 } // end IAsyncResponse interface
 
 export interface IHTTPResponse {
-    statusCode: number,
-    body: string,
-    headers?: object
+  statusCode: number;
+  body: string;
+  headers?: object;
 }
 /*
   Authentication Types
  */
 export interface IAuthenticationParameters {
-    maxTokenExpiry: string,
-    jwaPem: string,
-    userPoolId?: string,
-    systemMemberId?: string
+  maxTokenExpiry: string;
+  jwaPem: string;
+  userPoolId?: string;
+  systemMemberId?: string;
 } // end IAuthenticationParameters
 
 interface IFlexibleObject {
-    key: string,
-    value: any
+  key: string;
+  value: any;
 } // end IFlexibleObject Interface
 
 export interface IPermissionCheckParameters {
-    path: string,
-    resource: string,
-    method: string,
-    memberRole?: string,
-    clientType?: string
+  path: string;
+  resource: string;
+  method: string;
+  memberRole?: string;
+  clientType?: string;
 } // end IPermissionCheckParameters Interface
 
 export interface IIamPolicyParameters {
-    memberId: v4String,
-    effect: string,
-    resource: string,
-    context?: IFlexibleObject
+  memberId: v4String;
+  effect: string;
+  resource: string;
+  context?: IFlexibleObject;
 } // end IIamPolicyParameters Interface

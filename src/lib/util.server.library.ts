@@ -18,10 +18,10 @@ export const ping = async (): Promise<object> => {
  * @param messageObject
  * @returns {Promise<any>}
  */
-export const echo = async( messageObject ): Promise<object> => {
+export const echo = async (messageObject): Promise<object> => {
   try {
-    return JSON.parse( messageObject );
-  } catch( err ) {
+    return JSON.parse(messageObject);
+  } catch (err) {
     throw err;
   }
 }; // end echo
