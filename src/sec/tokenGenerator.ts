@@ -9,6 +9,7 @@ import moment from "moment";
 import { createJWE } from "jwe-handler";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import { getSecretValue, getValue } from "../lib/awsHelpers/authentication.helper.library";
+import { AuthenticationParameters } from "../interface/types";
 
 const { DEPLOY_REGION } = process.env;
 const { SYSTEM_MEMBER_ID_PATH } = process.env;
@@ -25,7 +26,7 @@ const ssm = new AWS.SSM({ apiVersion: "2014-11-06" });
  * @param jwaPem
  * @returns {Promise<{maxTokenExpiry: *, systemMemberId: *, jwaPem: *}>}
  */
-const getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }) => {
+const getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }): Promise<AuthenticationParameters> => {
   const resultArr = await Promise.all([
     await getSecretValue(jwaPem, ssm),
     await getValue(max, ssm),
@@ -38,7 +39,7 @@ const getAuthenticationParameters = async ({ max, systemMemberId, jwaPem }) => {
   };
 }; // end getAuthenticationParametersNew
 
-const handler = async () => {
+const handler = async (): Promise<JWE.Encryptor> => {
   let generatedJwe;
   let authParams;
   try {

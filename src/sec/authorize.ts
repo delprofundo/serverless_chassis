@@ -29,7 +29,7 @@ const ssm = new AWS.SSM({ apiVersion: "2014-11-06" });
  * @param context
  * @returns {Error|{policyDocument: {Version: string, Statement: {Action: string[], Resource: *[], Effect: *}[]}, context: *, principalId: *}}
  */
-export function buildIamPolicy({ memberId, effect, resource, context }: IamPolicyParameters) {
+export function buildIamPolicy({ memberId, effect, resource, context }: IamPolicyParameters): object {
   // test all input is valid and reject if not
   if (typeof memberId === "undefined" || memberId === null) {
     return new Error("memberId required to identify user or client");
@@ -120,7 +120,7 @@ async function authenticateIntegratedUser(authParams, event, context): Promise<a
   }
 } // end authenticateIntegratedUser
 
-const handler = async (event, context) => {
+const handler = async (event: object, context: object): Promise<object> => {
   const authParams = await getAuthenticationParameters(
     {
       maxTokenExpiry: MAX_TOKEN_EXPIRY_PATH,

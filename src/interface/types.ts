@@ -30,7 +30,7 @@ export interface AuthenticationParameters {
 
 interface FlexibleObject {
   key: string;
-  value: any;
+  value: string | number | object;
 } // end FlexibleObject Interface
 
 export interface PermissionCheckParameters {

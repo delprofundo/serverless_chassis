@@ -106,7 +106,7 @@ export default async function validateAccess({
   method,
   memberRole,
   clientType
-}: PermissionCheckParameters) {
+}: PermissionCheckParameters): Promise<object> {
   // this is to switch between users/clients
   let effectiveEntity;
   if (memberRole) {
@@ -117,28 +117,28 @@ export default async function validateAccess({
     logger.info("neither client or user type present, deny access");
     return { effect: "deny" };
   }
-  const pathObj = permMatrix.find(pathItem => {
+  const pathObj = permMatrix.find((pathItem): boolean => {
     return pathItem.path === path;
   });
-  const resourceObj = pathObj.resources.find(resourceItem => {
+  const resourceObj = pathObj.resources.find((resourceItem): boolean => {
     return resourceItem.resource === resource;
   });
   if (typeof resourceObj === "undefined" || resourceObj === null) {
     return { effect: "deny" };
   }
-  const methodObj = resourceObj.methods.find(methodItem => {
+  const methodObj = resourceObj.methods.find((methodItem): boolean => {
     return methodItem.method === method;
   });
   if (typeof methodObj === "undefined" || methodObj === null) {
     return { effect: "deny" };
   }
-  const deniedUser = methodObj.deny.find(denyItem => {
+  const deniedUser = methodObj.deny.find((denyItem): boolean => {
     return denyItem === effectiveEntity;
   });
   if (deniedUser === effectiveEntity) {
     return { effect: "deny" };
   }
-  const permittedUser = methodObj.allow.find(accessItem => {
+  const permittedUser = methodObj.allow.find((accessItem): boolean => {
     return accessItem === effectiveEntity;
   });
   if (typeof permittedUser === "undefined" || permittedUser === null) {

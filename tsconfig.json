@@ -13,6 +13,7 @@
     ]
   },
   "types": [
-    "node"
+    "node",
+    "node-jose"
   ]
 }
