@@ -1,4 +1,4 @@
-import AWS, { APIGateway } from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+//import AWS  from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import * as logger from "log-winston-aws-level";
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"; // eslint-disable-line import/no-extraneous-dependencies
 // import * as AWSXRay from "aws-xray-sdk-core";
