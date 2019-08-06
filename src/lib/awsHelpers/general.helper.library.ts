@@ -2,20 +2,18 @@ import {
     IAsyncResponse,
 } from "../../interface/types";
 
-import { SSM } from "aws-sdk"
-import {v4String} from "uuid/interfaces";
+import { v4String } from "uuid/interfaces";
 
 /**
  * shortcut for unstringing a potentially stringed json thing
  * @param item
  * @returns {*}
  */
-export const unstring = (item: Object|string): Object => {
-    const working = item;
+export const unstring = ( item: string|object ): object => {
     if (typeof item === "string") {
-        return JSON.parse( <string>working );
+        return JSON.parse( item );
     }
-    return working;
+    return item;
 }; // end unstring
 
 /**
