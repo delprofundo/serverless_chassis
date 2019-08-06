@@ -7,7 +7,7 @@
  * bruno@hypermedia.tech
  ******************************************* */
 import * as logger from "log-winston-aws-level";
-import { IPermissionCheckParameters } from "../interface/types";
+import { PermissionCheckParameters } from "../interface/types";
 
 const { SERVICE_BASE_PATH } = process.env;
 
@@ -106,7 +106,7 @@ export default async function validateAccess({
   method,
   memberRole,
   clientType
-}: IPermissionCheckParameters) {
+}: PermissionCheckParameters) {
   // this is to switch between users/clients
   let effectiveEntity;
   if (memberRole) {

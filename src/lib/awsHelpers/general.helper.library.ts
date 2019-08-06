@@ -1,5 +1,5 @@
 import {
-    IAsyncResponse,
+    AsyncResponse,
 } from "../../interface/types";
 
 import { v4String } from "uuid/interfaces";
@@ -23,7 +23,7 @@ export const unstring = ( item: string|object ): object => {
  * @param recordType
  * @returns {{result: *, recordId: *, recordType: *}}
  */
-export const generateAsyncResponse = ( resultCode: string, recordId: v4String, recordType: string ): IAsyncResponse => {
+export const generateAsyncResponse = ( resultCode: string, recordId: v4String, recordType: string ): AsyncResponse => {
     return {
         result: resultCode,
         recordId,

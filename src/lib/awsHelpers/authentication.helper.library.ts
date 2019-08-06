@@ -1,6 +1,6 @@
 import {
-  IAsyncResponse,
-  IAuthenticationParameters,
+  AsyncResponse,
+  AuthenticationParameters,
 } from "../../interface/types";
 
 import { SSM } from "aws-sdk"
@@ -26,7 +26,7 @@ export const unstring = (item: Object|string): Object => {
  * @param recordType
  * @returns {{result: *, recordId: *, recordType: *}}
  */
-export const generateAsyncResponse = ( resultCode: string, recordId: v4String, recordType: string ): IAsyncResponse => {
+export const generateAsyncResponse = ( resultCode: string, recordId: v4String, recordType: string ): AsyncResponse => {
   return {
     result: resultCode,
     recordId,
@@ -76,7 +76,7 @@ export const getValue = async ( key: string, ssm: SSM ) : Promise<string> => {
  * @param jwaPem
  * @param ssm
  */
-export const getAuthenticationParameters = async ({ maxTokenExpiry, systemMemberId, jwaPem }: IAuthenticationParameters , ssm: SSM ) => {
+export const getAuthenticationParameters = async ({ maxTokenExpiry, systemMemberId, jwaPem }: AuthenticationParameters , ssm: SSM ) => {
   const resultArr = await Promise.all([
     await getSecretValue(jwaPem, ssm),
     await getValue(maxTokenExpiry, ssm),
