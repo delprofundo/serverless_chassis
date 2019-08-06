@@ -13,7 +13,7 @@ import * as logger from "log-winston-aws-level";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import moment from "moment";
 import { decryptJWE } from "jwe-handler";
-import { getAuthenticationParameters } from "../lib/awsHelpers/general.helper.library";
+import { getAuthenticationParameters } from "../lib/awsHelpers/authentication.helper.library";
 import * as permissionsMatrix from "./permissionsMatrix";
 
 const { DEPLOY_REGION } = process.env;

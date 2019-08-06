@@ -15,12 +15,10 @@
  * @returns {Promise<PromiseResult<D, E>>}
  */
 export const putToDb = async (record, table, db) => {
-  return db
-    .put({
+  return db.put({
       TableName: table,
       Item: record
-    })
-    .promise();
+    }).promise();
 }; // end putToDb
 
 /**
