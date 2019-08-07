@@ -57,7 +57,7 @@ export const createMultipartUpload = async (objectKey: string, mediaType: string
   }
 }; // end createMultipartUpload
 
-export const completeMultiUpload = async ( completionPayload: AWS.S3.CompleteMultipartUploadRequest ): Promise<AWS.S3.CompleteMultipartUploadOutput> => {
+export const completeMultiUpload = async (completionPayload: AWS.S3.CompleteMultipartUploadRequest): Promise<AWS.S3.CompleteMultipartUploadOutput> => {
   try {
     return s3.completeMultipartUpload(completionPayload).promise();
   } catch (err) {

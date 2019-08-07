@@ -15,7 +15,7 @@ import { DynamoDB, SQS } from "aws-sdk";
  * @param incomingQueueEvent
  * @returns {{queueEvent}}
  */
-const extractQueueEvent = ( incomingQueueEvent: any ): object => {
+const extractQueueEvent = (incomingQueueEvent: any): object => {
   return {
     ...unstring(incomingQueueEvent.body),
     queueMessageId: incomingQueueEvent.messageId,
@@ -30,7 +30,7 @@ const extractQueueEvent = ( incomingQueueEvent: any ): object => {
  * @param queue
  * @returns {Promise<void>}
  */
-export const pushToQueue = async (body: object, queueUrl: string, queue: SQS ): Promise<SQS.SendMessageResult> => {
+export const pushToQueue = async (body: object, queueUrl: string, queue: SQS): Promise<SQS.SendMessageResult> => {
   try {
     return queue.sendMessage({
         MessageBody: JSON.stringify(body),
@@ -48,7 +48,7 @@ export const pushToQueue = async (body: object, queueUrl: string, queue: SQS ): 
  * @param target
  * @returns {Promise<[any, any, any, any, any, any, any, any, any, any]>}
  */
-export const queueEventPromisifier = async (queueEvents: object[], eventProcessorFunction: (e: object, t: SQS | DynamoDB) => any, target: SQS | DynamoDB ): Promise<any> => {
+export const queueEventPromisifier = async (queueEvents: object[], eventProcessorFunction: (e: object, t: SQS | DynamoDB) => any, target: SQS | DynamoDB): Promise<any> => {
   const parsedEvents = queueEvents.map((event) => {
     return extractQueueEvent(event);
   });

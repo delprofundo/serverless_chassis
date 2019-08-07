@@ -31,7 +31,7 @@ export const ping: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyRes
  * echo - simple POST test
  * @param event
  */
-export const echo: APIGatewayProxyHandler = async ( event ): Promise<APIGatewayProxyResult> => {
+export const echo: APIGatewayProxyHandler = async (event): Promise<APIGatewayProxyResult> => {
     try {
         return RESifySuccess(await util.echo(event.body));
     } catch (err) {

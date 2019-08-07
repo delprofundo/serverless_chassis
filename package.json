@@ -10,7 +10,8 @@
     "test:cover": "nyc mocha",
     "test:e2e": "mocha --quiet --require should --timeout 10000 'test/e2e/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
-    "lint": "tslint --project . --fix"
+    "tslint": "tslint --project . --fix",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "repository": {
     "type": "git",
@@ -65,6 +66,7 @@
     "ts-loader": "6.0.4",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
     "webpack": "^4.39.1",
     "webpack-node-externals": "1.7.2"
   },

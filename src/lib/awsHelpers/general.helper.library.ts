@@ -9,9 +9,9 @@ import { v4String } from "uuid/interfaces";
  * @param item
  * @returns {*}
  */
-export const unstring = ( item: string|object ): object => {
+export const unstring = (item: string | object): object => {
     if (typeof item === "string") {
-        return JSON.parse( item );
+        return JSON.parse(item);
     }
     return item;
 }; // end unstring
@@ -23,7 +23,7 @@ export const unstring = ( item: string|object ): object => {
  * @param recordType
  * @returns {{result: *, recordId: *, recordType: *}}
  */
-export const generateAsyncResponse = ( resultCode: string, recordId: v4String, recordType: string ): AsyncResponse => {
+export const generateAsyncResponse = (resultCode: string, recordId: v4String, recordType: string): AsyncResponse => {
     return {
         result: resultCode,
         recordId,

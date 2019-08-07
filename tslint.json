@@ -1,19 +1,15 @@
 {
     "extends": [
-        "tslint:recommended"
+        "tslint:recommended",
+        "tslint-config-prettier"
     ],
-//    "linterOptions": {
-//        "exclude": [
-//            "./test"
-//        ]
-//    },
     "rules": {
         "max-line-length": [true, {"limit": 120, "ignore-pattern": "^import |^/*"}],
-        "new-parens": true,
+        "new-parens": false,
         "no-arg": true,
         "no-bitwise": true,
         "no-conditional-assignment": true,
-        "no-consecutive-blank-lines": true,
+        "no-consecutive-blank-lines": false,
         "ordered-imports": false,
         "object-literal-sort-keys": false,
         "jsdoc-format": false,
