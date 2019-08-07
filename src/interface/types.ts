@@ -11,39 +11,39 @@ import { v4String } from "uuid/interfaces";
   Common Communication Types
  */
 export interface AsyncResponse {
-  result: string;
-  recordId: v4String;
-  recordType: string;
-  responseMessage?: string;
-  traceId?: string;
+  readonly result: string;
+  readonly recordId: v4String;
+  readonly recordType: string;
+  readonly responseMessage?: string;
+  readonly traceId?: string;
 } // end AsyncResponse interface
 
 /*
   Authentication Types
  */
 export interface AuthenticationParameters {
-  maxTokenExpiry: string;
-  jwaPem: string;
-  userPoolId?: string;
-  systemMemberId?: string;
+  readonly maxTokenExpiry: string;
+  readonly jwaPem: string;
+  readonly userPoolId?: string;
+  readonly systemMemberId?: string;
 } // end AuthenticationParameters
 
 interface FlexibleObject {
-  key: string;
-  value: string | number | object;
+  readonly key: string;
+  readonly value: string | number | object;
 } // end FlexibleObject Interface
 
 export interface PermissionCheckParameters {
-  path: string;
-  resource: string;
-  method: string;
-  memberRole?: string;
-  clientType?: string;
+  readonly path: string;
+  readonly resource: string;
+  readonly method: string;
+  readonly memberRole?: string;
+  readonly clientType?: string;
 } // end PermissionCheckParameters Interface
 
 export interface IamPolicyParameters {
-  memberId: v4String;
-  effect: string;
-  resource: string;
-  context?: FlexibleObject;
+  readonly memberId: v4String;
+  readonly effect: string;
+  readonly resource: string;
+  readonly context?: FlexibleObject;
 } // end IamPolicyParameters Interface

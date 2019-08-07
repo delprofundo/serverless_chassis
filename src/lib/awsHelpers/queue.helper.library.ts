@@ -48,7 +48,7 @@ export const pushToQueue = async (body: object, queueUrl: string, queue: SQS): P
  * @param target
  * @returns {Promise<[any, any, any, any, any, any, any, any, any, any]>}
  */
-export const queueEventPromisifier = async (queueEvents: object[], eventProcessorFunction: (e: object, t: SQS | DynamoDB) => any, target: SQS | DynamoDB): Promise<any> => {
+export const queueEventPromisifier = async (queueEvents: readonly object[], eventProcessorFunction: (e: object, t: SQS | DynamoDB) => any, target: SQS | DynamoDB): Promise<any> => {
   const parsedEvents = queueEvents.map((event) => {
     return extractQueueEvent(event);
   });
