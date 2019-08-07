@@ -15,7 +15,7 @@ import * as extractDynamoStreamDelta from "dynamo-stream-diff";
  * @param dynamoRecord
  * @returns {{oldRec: any, newRec: any, streamEventName: DynamoDBStreams.OperationType}}
  */
-const processIndividualDynamoRecord = dynamoRecord => {
+const processIndividualDynamoRecord = (dynamoRecord) => {
   const dynamoRecordParse = AWS.DynamoDB.Converter.output;
   const response = {
     newRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.NewImage }),
@@ -40,7 +40,7 @@ const dynamoStreamEventPromisifier = async (streamEventAssembly, eventProcessorF
   const reducedEvents = streamEventAssembly.incomingRecords.map(processIndividualDynamoRecord);
   try {
     await Promise.all(
-      reducedEvents.map(async event => {
+      reducedEvents.map(async (event) => {
         return eventProcessorFunction(event, target);
       })
     );

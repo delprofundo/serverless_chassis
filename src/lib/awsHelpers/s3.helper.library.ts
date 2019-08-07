@@ -10,10 +10,10 @@ import AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependenc
 
 import * as AWSXRay from "aws-xray-sdk-core";
 // eslint-disable-line import/no-extraneous-dependencies
-const AWS_wrapped = AWSXRay.captureAWS(AWS);
+const AWS_WRAPPED = AWSXRay.captureAWS(AWS);
 
 const { DEPLOY_REGION } = process.env;
-const s3 = new AWS_wrapped.S3({ region: DEPLOY_REGION, signatureVersion: "v4" });
+const s3 = new AWS_WRAPPED.S3({ region: DEPLOY_REGION, signatureVersion: "v4" });
 
 const MEDIA_TYPES = {
   VIDEO: {
@@ -28,7 +28,7 @@ const MEDIA_TYPES = {
  * @param destinationBucket
  * @returns {Promise<void>}
  */
-export const copyBucketObject = async (objectKey: string, sourceBucket: string, destinationBucket: string) : Promise<AWS.S3.CopyObjectResult> => {
+export const copyBucketObject = async (objectKey: string, sourceBucket: string, destinationBucket: string): Promise<AWS.S3.CopyObjectResult> => {
   try {
     const response = await s3
       .copyObject({
@@ -43,7 +43,7 @@ export const copyBucketObject = async (objectKey: string, sourceBucket: string, 
   }
 }; // end copyBucketObject
 
-export const createMultipartUpload = async (objectKey: string, mediaType: string, bucket: string) : Promise<AWS.S3.CreateMultipartUploadOutput> => {
+export const createMultipartUpload = async (objectKey: string, mediaType: string, bucket: string): Promise<AWS.S3.CreateMultipartUploadOutput> => {
   try {
     return await s3
       .createMultipartUpload({
@@ -57,7 +57,7 @@ export const createMultipartUpload = async (objectKey: string, mediaType: string
   }
 }; // end createMultipartUpload
 
-export const completeMultiUpload = async ( completionPayload : AWS.S3.CompleteMultipartUploadRequest ) : Promise<AWS.S3.CompleteMultipartUploadOutput> => {
+export const completeMultiUpload = async ( completionPayload: AWS.S3.CompleteMultipartUploadRequest ): Promise<AWS.S3.CompleteMultipartUploadOutput> => {
   try {
     return s3.completeMultipartUpload(completionPayload).promise();
   } catch (err) {

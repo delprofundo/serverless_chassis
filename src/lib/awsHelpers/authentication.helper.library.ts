@@ -3,7 +3,7 @@ import {
   AuthenticationParameters,
 } from "../../interface/types";
 
-import { SSM } from "aws-sdk"
+import { SSM } from "aws-sdk";
 import {v4String} from "uuid/interfaces";
 
 /**
@@ -11,12 +11,11 @@ import {v4String} from "uuid/interfaces";
  * @param item
  * @returns {*}
  */
-export const unstring = (item: Object|string): Object => {
-  const working = item;
+export const unstring = (item: object|string): object => {
   if (typeof item === "string") {
-    return JSON.parse( <string>working );
+    return JSON.parse( item );
   }
-  return working;
+  return item;
 }; // end unstring
 
 /**
@@ -40,7 +39,7 @@ export const generateAsyncResponse = ( resultCode: string, recordId: v4String, r
  * @param ssm
  * @returns {Promise<PromiseResult<D, E> | never>}
  */
-export const getSecretValue = async ( key: string, ssm: SSM ) : Promise<string> => {
+export const getSecretValue = async ( key: string, ssm: SSM ): Promise<string> => {
   try {
     const param = await ssm
       .getParameters({
@@ -60,7 +59,7 @@ export const getSecretValue = async ( key: string, ssm: SSM ) : Promise<string> 
  * @param ssm
  * @returns {Promise<PromiseResult<D, E> | never>}
  */
-export const getValue = async ( key: string, ssm: SSM ) : Promise<string> => {
+export const getValue = async ( key: string, ssm: SSM ): Promise<string> => {
   try {
     const ssmResponse = await ssm.getParameters({ Names: [key] }).promise();
     return ssmResponse.Parameters[0].Value;

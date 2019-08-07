@@ -8,8 +8,7 @@ import { putToDb, updateRecord } from "../../../src/lib/awsHelpers/dynamoCRUD.he
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
-
-describe("dynamoDB crud helper", function() {
+describe("dynamoDB crud helper", () => {
   const sandbox = sinon.createSandbox();
   const dbClient: DynamoDB.DocumentClient = new DynamoDB.DocumentClient();
 
@@ -32,7 +31,7 @@ describe("dynamoDB crud helper", function() {
         TableName: "the-test-table",
         Item: { id: 12345 }
       };
-      return putToDb(dbItem, dbClient).then(response => {
+      return putToDb(dbItem, dbClient).then((response) => {
         stub.should.have.been.calledWith(dbItem);
 
         response.should.deep.equal(EXPECTED_PUT_RESPONSE);
@@ -59,7 +58,7 @@ describe("dynamoDB crud helper", function() {
         ReturnValues: "ALL_NEW",
         ExpressionAttributeValues: {}
       };
-      return updateRecord(updatePayload, dbClient).then(response => {
+      return updateRecord(updatePayload, dbClient).then((response) => {
         stub.should.have.been.calledWith(updatePayload);
         response.should.deep.equal(EXPECTED_UPDATE_RESPONSE);
       });

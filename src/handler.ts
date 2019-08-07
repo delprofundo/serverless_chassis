@@ -1,6 +1,6 @@
-//import AWS  from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+// import AWS  from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import * as logger from "log-winston-aws-level";
-import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"; // eslint-disable-line import/no-extraneous-dependencies
+import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
 // import * as AWSXRay from "aws-xray-sdk-core";
 import { RESifySuccess, RESifyErr } from "./lib/awsHelpers/RESifier.representor.library";
 import * as util from "./lib/util.server.library";
@@ -14,12 +14,11 @@ import * as util from "./lib/util.server.library";
 // declare the DB here and inject it to all calls that require it
 // const db = new AWS.DynamoDB.DocumentClient();
 
-
 // EXPORTED FUNCTIONS
 /**
  * ping - simple GET test
  */
-export const ping: APIGatewayProxyHandler = async () : Promise<APIGatewayProxyResult> => {
+export const ping: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyResult> => {
     try {
         return RESifySuccess(await util.ping());
     } catch (err) {
@@ -32,7 +31,7 @@ export const ping: APIGatewayProxyHandler = async () : Promise<APIGatewayProxyRe
  * echo - simple POST test
  * @param event
  */
-export const echo: APIGatewayProxyHandler = async ( event ) : Promise<APIGatewayProxyResult> => {
+export const echo: APIGatewayProxyHandler = async ( event ): Promise<APIGatewayProxyResult> => {
     try {
         return RESifySuccess(await util.echo(event.body));
     } catch (err) {
