@@ -28,7 +28,7 @@
         "readonly-keyword": true,
         "readonly-array": false,
         "no-let": [true, "ignore-local"],
-        "no-object-mutation": false, //revisit
+        "no-object-mutation": true,
         "no-delete": true,
         "no-method-signature": true,
         // Functional style rules

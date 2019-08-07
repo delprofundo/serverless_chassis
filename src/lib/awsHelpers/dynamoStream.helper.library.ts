@@ -17,15 +17,14 @@ import * as extractDynamoStreamDelta from "dynamo-stream-diff";
  */
 const processIndividualDynamoRecord = (dynamoRecord) => {
   const dynamoRecordParse = AWS.DynamoDB.Converter.output;
-  const response = {
+  let response = {
     newRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.NewImage }),
     oldRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.OldImage }),
     streamEventName: dynamoRecord.eventName,
     delta: undefined
   };
   if (dynamoRecord.eventName === "MODIFY") {
-    const diff = extractDynamoStreamDelta(dynamoRecord);
-    response.delta = diff.diffList;
+    response = {...response, delta:extractDynamoStreamDelta(dynamoRecord)};
   }
   return response;
 }; // end processIndividualDynamoRecord

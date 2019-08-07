@@ -29,18 +29,22 @@ export const isAcceptablePageLimit = (candidateLimit, pageParams) => {
  * @returns {{TableName: *}}
  */
 export const createBaseQueryParameters = (table, queryStringParameters, pageParams) => {
-  const baseQueryParameterObject = {
+  let baseQueryParameterObject = {
     TableName: table,
     ExclusiveStartKey: undefined,
     Limit: undefined
   };
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "lek")) {
-    baseQueryParameterObject.ExclusiveStartKey = JSON.parse(queryStringParameters.lek);
+    baseQueryParameterObject = {
+      ...baseQueryParameterObject,
+      ExclusiveStartKey: JSON.parse(queryStringParameters.lek)
+    };
   }
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "limit")) {
-    baseQueryParameterObject.Limit = isAcceptablePageLimit(queryStringParameters.limit, pageParams)
+    const limit = isAcceptablePageLimit(queryStringParameters.limit, pageParams)
       ? queryStringParameters.limit
       : pageParams.DEFAULT;
+    baseQueryParameterObject = { ...baseQueryParameterObject, Limit: limit };
   }
   return baseQueryParameterObject;
 }; // end createBaseQueryParameters
@@ -58,7 +62,7 @@ export const lekMe = (targetResponse, dynamoResponse) => {
     Object.prototype.hasOwnProperty.call(dynamoResponse, "LastEvaluatedKey") &&
     dynamoResponse.LastEvaluatedKey !== null
   ) {
-    updatedResponse.lek = dynamoResponse.LastEvaluatedKey;
+    return {...updatedResponse, lek: dynamoResponse.LastEvaluatedKey};
   }
   return updatedResponse;
 }; // end lekMe
