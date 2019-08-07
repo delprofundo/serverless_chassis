@@ -10,8 +10,6 @@
     "test:cover": "nyc mocha",
     "test:e2e": "mocha --quiet --require should --timeout 10000 'test/e2e/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
-    "lint:js": "eslint ./src/**/*.ts --fix",
-    "lint:ts": "eslint ./src/**/*.ts --fix",
     "lint": "tslint --project . --fix"
   },
   "repository": {
@@ -41,8 +39,6 @@
     "@types/source-map-support": "^0.5.0",
     "@types/typescript": "^2.0.0",
     "@types/uuid": "^3.4.5",
-    "@typescript-eslint/eslint-plugin": "1.13.0",
-    "@typescript-eslint/parser": "1.13.0",
     "assert": "2.0.0",
     "aws-lambda": "^0.1.2",
     "aws-sdk": "^2.504.0",
@@ -51,12 +47,6 @@
     "chai-things": "0.2.0",
     "copy-webpack-plugin": "^5.0.4",
     "cross-env": "5.2.0",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-typescript": "4.0.1",
-    "eslint-config-prettier": "6.0.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-prettier": "3.1.0",
-    "eslint-plugin-react": "7.14.3",
     "istanbul": "0.4.5",
     "js-yaml": "3.13.1",
     "jsdoc": "3.6.3",
@@ -81,7 +71,6 @@
   "dependencies": {
     "aws-xray-sdk-core": "2.3.4",
     "dynamo-stream-diff": "0.1.0",
-    "eslint-plugin-functional": "^0.5.2",
     "jwe-handler": "^2.0.5",
     "log-winston-aws-level": "1.11.0",
     "moment": "2.24.0",
