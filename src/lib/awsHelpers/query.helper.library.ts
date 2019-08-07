@@ -7,6 +7,8 @@
  * @module dynamodb/queryHelper
  */
 
+import { BaseQueryParameters } from "../../interface/types";
+
 /**
  * where a query accepts a custom page limit this is
  * used to decide between that provided and the default.
@@ -14,7 +16,7 @@
  * @param pageParams : object containing the bounds and default
  * @returns {boolean}
  */
-export const isAcceptablePageLimit = (candidateLimit, pageParams) => {
+export const isAcceptablePageLimit = (candidateLimit: number, pageParams: any): boolean => {
   if (!candidateLimit) {
     return false;
   }
@@ -28,23 +30,18 @@ export const isAcceptablePageLimit = (candidateLimit, pageParams) => {
  * @param pageParams
  * @returns {{TableName: *}}
  */
-export const createBaseQueryParameters = (table, queryStringParameters, pageParams) => {
-  let baseQueryParameterObject = {
-    TableName: table,
-    ExclusiveStartKey: undefined,
-    Limit: undefined
+export const createBaseQueryParameters = (table: string, queryStringParameters: any, pageParams: any): BaseQueryParameters => {
+  let baseQueryParameterObject: BaseQueryParameters = {
+    TableName: table
   };
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "lek")) {
-    baseQueryParameterObject = {
-      ...baseQueryParameterObject,
-      ExclusiveStartKey: JSON.parse(queryStringParameters.lek)
-    };
+    baseQueryParameterObject = { ...baseQueryParameterObject, ExclusiveStartKey: JSON.parse(queryStringParameters.lek) };
   }
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "limit")) {
     const limit = isAcceptablePageLimit(queryStringParameters.limit, pageParams)
       ? queryStringParameters.limit
       : pageParams.DEFAULT;
-    baseQueryParameterObject = { ...baseQueryParameterObject, Limit: limit };
+    return { ...baseQueryParameterObject, Limit: limit };
   }
   return baseQueryParameterObject;
 }; // end createBaseQueryParameters
@@ -56,13 +53,12 @@ export const createBaseQueryParameters = (table, queryStringParameters, pagePara
  * @param dynamoResponse
  * @returns {*}
  */
-export const lekMe = (targetResponse, dynamoResponse) => {
-  const updatedResponse = targetResponse;
+export const lekMe = (targetResponse: object, dynamoResponse: any): object => {
   if (
     Object.prototype.hasOwnProperty.call(dynamoResponse, "LastEvaluatedKey") &&
     dynamoResponse.LastEvaluatedKey !== null
   ) {
-    return {...updatedResponse, lek: dynamoResponse.LastEvaluatedKey};
+    return { ...targetResponse, lek: dynamoResponse.LastEvaluatedKey };
   }
-  return updatedResponse;
+  return targetResponse;
 }; // end lekMe

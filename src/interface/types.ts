@@ -47,3 +47,9 @@ export interface IamPolicyParameters {
   readonly resource: string;
   readonly context?: FlexibleObject;
 } // end IamPolicyParameters Interface
+
+export interface BaseQueryParameters {
+  readonly TableName: string,
+  readonly ExclusiveStartKey?: object,
+  readonly Limit?: number
+}
