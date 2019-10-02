@@ -39,3 +39,4 @@ jspm_packages
 .webpack
 .serverless
 .idea/
+*.iml
