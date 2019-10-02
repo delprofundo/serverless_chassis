@@ -61,4 +61,4 @@ i have not been working in an offline mode, instead using the included CircleCI 
 
 author: bruno@hypermedia.tech
 
-![alt text](https://s3-ap-southeast-2.amazonaws.com/hypermedia.media/ht_square_small.png "hypermedia.tech")
+![alt text](https://hyper-mega-public.s3.amazonaws.com/hypermediatech-01-high-resolution-dark_500.png "hypermedia.tech" )
