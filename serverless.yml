@@ -34,6 +34,7 @@ plugins:
   - serverless-plugin-tracing
   - serverless-webpack
   - serverless-plugin-bind-deployment-id
+  - serverless-pseudo-parameters
 custom:
   #warmup:
   #  cleanFolders: false
