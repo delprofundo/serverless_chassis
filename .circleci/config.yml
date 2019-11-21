@@ -34,9 +34,9 @@ jobs:
       - run:
           name: build and deploy bw dev yo!
           command: |
-            aws configure --profile default set aws_access_key_id $BW_AWS_ACCESS_KEY_ID
-            aws configure --profile default set aws_secret_access_key $BW_AWS_SECRET_ACCESS_KEY
-            aws configure --profile default set region $BW_AWS_REGION
+            aws configure --profile default set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure --profile default set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure --profile default set region $AWS_REGION
             npm run deploy:dev
 workflows:
   version: 2
