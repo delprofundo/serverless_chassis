@@ -1,4 +1,6 @@
-## generic serverless microservice chassis
+## generic serverless microservice chassis V2.0
+
+NOTE: DOCUMENTATION OF V2 IS A WORK IN PROGRESS HOWEVER THE CHASSIS IS COMPLETE AND CAN BE USED WITH SOME FINESSE
 
 this is a very simple serverless microservice chassis that allows rapid deployment of new microservices to the the AWS cloud.
 
@@ -43,21 +45,20 @@ this chassis includes a circleCi configuration, i have left my personal dev acco
 
 #### configurators folder
 
-this is where serverless components like tables, streams and bindings should be created. these are then referenced in the Resources section of serverless.yml
+the majority of AWS resurces have been configured in this folder already, a shared table and queue etc.
 
-#### lib folder
+custom resources will be required for some projects, the cloudformation configuration files should be placed here and referenced in the Resources section of serverless.yml
 
-this is where I structure the actual code for the service, this code is usually referenced from the handler.js file tho some uses may be referred to directly by the serverless.yml config.
+#### src folder
 
-i prefer to create subfolders here for complex domain specific functionality such as factory modules and keep general server interfaces etc in the root.
+The src folder contains boiler plate, helpers and domain business logic.
+
+***TODO: DESCRIBE IN DETAIL***
 
 #### test folder
 
 serverless.yml is configured to use mocha testing out of the box, it will look for tests within the provided test structure.
 
-### Serverless Offline Needs work
-
-i have not been working in an offline mode, instead using the included CircleCI script to test in a dev environment, do with the repo what you please but i welcome and encourage assistance in configuring and documenting serverless, dynamo and kinesis offline support.
 
 author: bruno@hypermedia.tech
 
