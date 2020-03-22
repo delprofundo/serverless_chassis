@@ -10,21 +10,21 @@ const logger = require( "log-winston-aws-level" );
 
 /**
  * takes message, queue url and queue and puts message on queue
- * @param body
- * @param queueUrl
+ * @param messagePayload
+ * @param requestType
+ * @param queueAddress
  * @param queue
- * @returns {Promise<void>}
+ * @returns {Promise<>}
  */
-export const pushToQueue = async ( body, queueUrl, queue ) => {
-  try {
-    return queue.sendMessage({
-      MessageBody: JSON.stringify(body),
-      QueueUrl: queueUrl
-    }).promise();
-  } catch( err ) {
-    throw err
-  }
-}; // end pushToQueue
+export const queuePush = async ( messagePayload, requestType, queueAddress, queue ) => {
+  return await queue.sendMessage({
+    MessageBody: JSON.stringify({
+      eventPayload: messagePayload,
+      requestType: requestType
+    }),
+    QueueUrl: queueAddress
+  }).promise();
+}; // end queuePush
 
 /**
  * HOF pushing messages onto service stream

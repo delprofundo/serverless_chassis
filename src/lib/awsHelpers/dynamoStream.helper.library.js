@@ -17,7 +17,7 @@ const extractDynamoStreamDelta = require( "dynamo-stream-diff" );
  * @param target
  * @returns {Promise<any>}
  */
-export const dynamoStreamEventPromisifier = async ( streamEventAssembly, eventProcessorFunction, target ) => {
+export const streamEventPromisifier = async ( streamEventAssembly, eventProcessorFunction, target ) => {
   const reducedEvents = streamEventAssembly.incomingRecords.map( processIndividualDynamoRecord );
   try {
     await Promise.all(reducedEvents.map( async ( event ) => {
@@ -27,7 +27,7 @@ export const dynamoStreamEventPromisifier = async ( streamEventAssembly, eventPr
     logger.error( "error in table stream PROMISIFIER", err );
     throw err;
   }
-}; // end dynamoStreamEventPromisifier
+}; // end streamEventPromisifier
 
 /**
  * helper to extract the useful contents from a dynamo stream record including new old and delta

@@ -5,7 +5,7 @@ chai.use( chaiAsPromised );
 const should = chai.Should();
 
 //const sinon = require('sinon');
-const { ping, echo } = require( "../../../lib/util.server.library" );
+const { ping, echo } = require( "../../../src/lib/util.server.library" );
 
 const STATIC_PONG = { message: "PONG" };
 const ECHO_REQUEST = { value : "Generic Test Phrase" };

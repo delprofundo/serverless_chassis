@@ -1,27 +1,18 @@
 /**
- * service handler
+ * http service handler
  * delprofundo (@brunowatt)
  * bruno@hypermedia.tech
- * @module YYYYY/ServiceHandler
+ * @module http/ServiceHandler
  */
-//const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY;
-//const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET;
+const logger = require("log-winston-aws-level");
+const util = require( "../lib/util.server.library" );
+
 import {
   RESifySuccess,
   RESifyErr
-} from "./lib/awsHelpers/RESifier.representor.library";
+} from "../lib/awsHelpers/RESifier.representor.library";
+import { unstring } from "../lib/awsHelpers/general.helper.library";
 
-const DEPLOY_REGION = process.env.DEPLOY_REGION;
-
-//ADD LIB's HERE
-
-const AWSXRay = require("aws-xray-sdk-core");
-const AWS = AWSXRay.captureAWS(require("aws-sdk"));
-const util = require( "./lib/util.server.library" );
-//declare the DB here and inject it to all calls that require it
-const db = new AWS.DynamoDB.DocumentClient();
-
-//EXPORTED FUNCTIONS
 /**
  * ping - simple GET test
  * @param event
