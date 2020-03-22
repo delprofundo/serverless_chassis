@@ -1,6 +1,2 @@
 #customDomainName: ${ssm:/{{ROOT_HIERARCHY}}/api/url}
-#customDomainNAme: somedomain.com
-#jwaPemPath: /{{ROOT_HIERARCHY}}/auth/enc/private
-#kmsKeyPath: /{{ROOT_HIERARCHY}}/auth/kms/key
-#maxTokenExpiryPath: /{{ROOT_HIERARCHY}}/auth/token/expiry
-#systemMemberIdPath: /{{ROOT_HIERARCHY}}/auth/system/memberId
+customDomainNAme: somedomain.com
