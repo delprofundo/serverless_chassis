@@ -3,7 +3,7 @@ frameworkVersion:  ">=1.67.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   tracing: true
   stage: ${opt:stage, self:custom.defaultStage}
   memorySize: 256
@@ -11,10 +11,14 @@ provider:
   logRetentionInDays: 7
   stackTags:
     Name: ${self:service.name}
-    Environment: ${opt:region, self:provider.region}
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
+    GLOBAL_SERVICE_BUS: ${self:custom.sharedServiceBus}
+    SERVICE_QUEUE:
+      Ref: ServiceQueue
+    SERVICE_TABLE:
+      Ref: ServiceTable
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -24,6 +28,20 @@ provider:
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        Fn::GetAtt: [ ServiceQueue, Arn ]
+    - Effect: Allow
+      Action:
+        - kinesis:PutRecord
+        - kinesis:PutRecords
+        - kinesis:GetRecords
+        - kinesis:GetShardIterator
+        - kinesis:DescribeStream
+        - kinesis:ListStreams
+      Resource: ${self:custom.sharedServiceBusARN}
 package:
   include:
     - configurators
@@ -38,13 +56,8 @@ plugins:
   - serverless-webpack
   - serverless-plugin-bind-deployment-id
   - serverless-pseudo-parameters
-  - serverless-certificate-creator
+  #- serverless-certificate-creator
 custom:
-  customCertificate:
-    certificateName: "*.groklobster.io"
-    idempotencyToken: "asgroklobsterio"
-    hostedZoneName: "groklobster.io"
-    region: us-east-1
   #warmup:
   #  cleanFolders: false
   local: ${file(./environmentSpecific.yml)} #a file for deployment specific values, can be supplied by Param Store
@@ -52,10 +65,8 @@ custom:
   grub: YYYYY-api
   defaultStage: dev
   basePath: YYYYYs
-  jwaPemPath: ${self:custom.local.jwaPemPath}
   kmsKeyPath: ${self:custom.local.kmsKeyPath}
   maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
-  systemMemberIdPath: ${self:custom.local.systemMemberIdPath}
   domainName: ${self:custom.local.customDomainName}
   profiles:
     dev: default
@@ -65,15 +76,24 @@ custom:
     uat: us-east-1
     prod: ap-southeast-2
 functions:
-  ping-cert:
-    handler: handler.ping
+  pingXXXXX:
+    handler: src/eventHandlers/http.ping
     name: ${self:provider.stage}-${self:custom.grub}-util-ping
     description: a simple payload ping GET test
     events:
-    - http:
-        path: /ping
-        method: get
-        cors: true
+      - http:
+          path: /ping
+          method: get
+          cors: true
+  echoXXXXX:
+    handler: src/eventHandlers/http.echo
+    name: ${ self:provider.stage}-${self:custom.grub}-util-echo
+    description: a simple payload echo POST test
+    events:
+      - http:
+          path: /echo
+          method: post
+          cors: true
 # Resources are essentially CloudFormation scripts. These are kept in the configurators folder
 resources:
   Resources:
@@ -81,7 +101,9 @@ resources:
     __deployment__:
       Properties:
         Description: Deployment alias for resources that depend on deployment id
-    #ApiGatewayStage: ${file(configurators/apiGatewayStage.yaml)}
-    #IamPolicyLambdaDynamo: ${file(configurators/iamPolicyLambdaDynamo.yaml)}
-    #PathMapping: ${file(configurators/pathMapping.yaml)}
+    ApiGatewayStage: ${file(configurators/apiGatewayStage.yaml)}
+    IamPolicyLambdaDynamo: ${file(configurators/iamPolicyLambdaDynamo.yaml)}
+    PathMapping: ${file(configurators/pathMapping.yaml)}
+    ServiceTable: ${file(configurators/serviceTable.yaml)}
+    ServiceQueue: ${file(configurators/serviceQueue.yaml)}
 

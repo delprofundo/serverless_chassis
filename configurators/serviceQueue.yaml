@@ -1,0 +1,5 @@
+---
+
+Type: AWS::SQS::Queue
+Properties:
+  MessageRetentionPeriod: 345600

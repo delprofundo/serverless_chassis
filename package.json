@@ -59,9 +59,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",
+    "@hapi/joi": "^17.1.1",
     "aws-xray-sdk-core": "^2.3.4",
+    "dynamo-stream-diff": "^0.1.0",
+    "joi": "^14.3.1",
     "jwe-handler": "3.0.0",
     "log-winston-aws-level": "1.11.0",
+    "randomstring": "^1.1.5",
     "request": "^2.88.2",
     "request-promise-native": "1.0.8",
     "source-map-support": "^0.5.13",
