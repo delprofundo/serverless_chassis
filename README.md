@@ -1,6 +1,7 @@
 ## generic serverless microservice chassis V2.0
 
-NOTE: DOCUMENTATION OF V2 IS A WORK IN PROGRESS HOWEVER THE CHASSIS IS COMPLETE AND CAN BE USED WITH SOME FINESSE
+_NOTE: DOCUMENTATION OF V2 IS A WORK IN PROGRESS HOWEVER THE CHASSIS IS COMPLETE AND CAN BE USED WITH SOME FINESSE
+      V1.0 IS TAGGED AND CAN ALSO BE USED STILL FOR MORE BASIC CONFIGURATIONS_
 
 this is a very simple serverless microservice chassis that allows rapid deployment of new microservices to the the AWS cloud.
 
