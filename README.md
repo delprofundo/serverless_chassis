@@ -1,3 +1,6 @@
+![alt text](https://hyper-mega-public.s3.amazonaws.com/hypermediatech-01-high-resolution-dark_500.png "hypermedia.tech" )
+author: bruno@hypermedia.tech
+
 ## generic serverless microservice chassis V2.0
 
 _NOTE: DOCUMENTATION OF V2 IS A WORK IN PROGRESS HOWEVER THE CHASSIS IS COMPLETE AND CAN BE USED WITH SOME FINESSE
@@ -59,8 +62,3 @@ The src folder contains boiler plate, helpers and domain business logic.
 #### test folder
 
 serverless.yml is configured to use mocha testing out of the box, it will look for tests within the provided test structure.
-
-
-author: bruno@hypermedia.tech
-
-![alt text](https://hyper-mega-public.s3.amazonaws.com/hypermediatech-01-high-resolution-dark_500.png "hypermedia.tech" )
