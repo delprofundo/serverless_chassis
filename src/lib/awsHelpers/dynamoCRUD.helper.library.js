@@ -6,7 +6,6 @@
  * bruno@hypermedia.tech
  * @module dynamodb/CRUD
  */
-
 export const dynamoGet = async ( hashKey, rangeKey, tableName,  db ) => {
   return await db.get({
     TableName: tableName,
@@ -25,11 +24,31 @@ export const dynamoGet = async ( hashKey, rangeKey, tableName,  db ) => {
  * @returns {Promise<PromiseResult<D, E>>}
  */
 export const dynamoPut = async (record, table, db ) => {
-  return await db.put({
+  return db.put({
     TableName: table,
     Item: record
   }).promise();
 }; // end putToDb
+
+export const incrementCounterField = ( hashKey, rangeKey, fieldName, tableName, db ) => {
+  const updateParams = {
+    TableName: tableName,
+    Key: {
+      hashKey,
+      rangeKey
+    },
+    UpdateExpression: 'add #inc_name :inc_value',
+    ExpressionAttributeNames: {
+      '#inc_name': fieldName
+    },
+    ExpressionAttributeValues: {
+      ':inc_value': 1
+    },
+    ReturnConsumedCapacity: 'TOTAL',
+    ReturnValues: 'ALL_NEW'
+  }
+  return db.update( updateParams ).promise();
+}; // end incrementCounterField
 
 /**
  * takes params and db and updates the record.
@@ -44,7 +63,6 @@ export const updateRecord = async ( updateParameters, db ) => {
 const DELIMITER = "#";
 export const compoundKeyExtract = ( string, indexNumber = 1 ) => {
   const workingString = string.split( DELIMITER ).slice( 0, indexNumber );
-  console.log("working : ", workingString );
   return workingString.join( DELIMITER );
 };
 
@@ -55,7 +73,6 @@ export const compoundKeyExtract = ( string, indexNumber = 1 ) => {
  * @returns {*}
  */
 export const deindexDynamoRecord = ( dynamoRecord ) => {
-  console.log( "in de-index : ", dynamoRecord );
   const { hashKey, rangeKey, ...trimmedRecord } = dynamoRecord;
   return trimmedRecord;
 }; // end deindexDynamo;
