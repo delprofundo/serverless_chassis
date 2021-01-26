@@ -1,5 +1,5 @@
 service: YYYYY-service
-frameworkVersion:  ">=2.0.0 < 3.0.0"
+frameworkVersion:  ">=2.20.1 < 3.0.0"
 
 provider:
   name: aws
