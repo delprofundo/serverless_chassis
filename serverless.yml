@@ -1,10 +1,11 @@
-service: YYYYY-service
-frameworkVersion:  ">=2.20.1 < 3.0.0"
-
+service: graph-service
+frameworkVersion:  ">=2.23.0 < 3.0.0"
 provider:
   name: aws
   runtime: nodejs12.x
-  tracing: true
+  tracing:
+    apiGateway: true
+    lambda: true
   stage: ${opt:stage, self:custom.defaultStage}
   memorySize: 256
   timeout: 20
@@ -14,11 +15,6 @@ provider:
   environment:
     DEPLOY_REGION: ${opt:region, self:provider.region}
     API_ROOT: ${self:custom.domainName}
-    GLOBAL_SERVICE_BUS: ${self:custom.sharedServiceBus}
-    SERVICE_QUEUE:
-      Ref: ServiceQueue
-    SERVICE_TABLE:
-      Ref: ServiceTable
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -28,20 +24,6 @@ provider:
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource: "*"
-    - Effect: Allow
-      Action:
-        - sqs:SendMessage
-      Resource:
-        Fn::GetAtt: [ ServiceQueue, Arn ]
-    - Effect: Allow
-      Action:
-        - kinesis:PutRecord
-        - kinesis:PutRecords
-        - kinesis:GetRecords
-        - kinesis:GetShardIterator
-        - kinesis:DescribeStream
-        - kinesis:ListStreams
-      Resource: ${self:custom.sharedServiceBusARN}
 package:
   include:
     - configurators
@@ -56,27 +38,36 @@ plugins:
   - serverless-webpack
   - serverless-plugin-bind-deployment-id
   - serverless-pseudo-parameters
-  #- serverless-certificate-creator
 custom:
-  #warmup:
-  #  cleanFolders: false
-  local: ${file(./environmentSpecific.yml)} #a file for deployment specific values, can be supplied by Param Store
+  local: ${file(./environmentSpecific.yml)}
   webpackIncludeModules: true
-  grub: YYYYY-api
+  grub: graph-api
   defaultStage: dev
-  basePath: YYYYYs
+  basePath: graph
   kmsKeyPath: ${self:custom.local.kmsKeyPath}
   maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
   domainName: ${self:custom.local.customDomainName}
   profiles:
     dev: default
-  #defaultRegion: us-east-1
   regions:
     dev: us-east-1
     uat: us-east-1
     prod: ap-southeast-2
 functions:
-  pingXXXXX:
+  graphql:
+    handler: src/eventHandlers/graph.graphqlHandler
+    name: ${self:provider.stage}-${self:custom.grub}-graphqlHandler
+    description: graphql handler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
+  ping:
     handler: src/eventHandlers/http.ping
     name: ${self:provider.stage}-${self:custom.grub}-util-ping
     description: a simple payload ping GET test
@@ -85,25 +76,10 @@ functions:
           path: /ping
           method: get
           cors: true
-  echoXXXXX:
-    handler: src/eventHandlers/http.echo
-    name: ${ self:provider.stage}-${self:custom.grub}-util-echo
-    description: a simple payload echo POST test
-    events:
-      - http:
-          path: /echo
-          method: post
-          cors: true
-# Resources are essentially CloudFormation scripts. These are kept in the configurators folder
 resources:
   Resources:
-    #this entry allows access to the otherwise tricky deployment resource
     __deployment__:
       Properties:
         Description: Deployment alias for resources that depend on deployment id
     ApiGatewayStage: ${file(configurators/apiGatewayStage.yaml)}
-    IamPolicyLambdaDynamo: ${file(configurators/iamPolicyLambdaDynamo.yaml)}
     PathMapping: ${file(configurators/pathMapping.yaml)}
-    ServiceTable: ${file(configurators/serviceTable.yaml)}
-    ServiceQueue: ${file(configurators/serviceQueue.yaml)}
-

@@ -1,5 +1,1 @@
-#customDomainName: ${ssm:/{{ROOT_HIERARCHY}}/api/url}
-#projectCode: ${ssm:/{{ROOT_HIERARCHY}}/api/projectCode}
-sharedServiceBus: ${ssm:/{{ROOT_HIERARCHY}}/api/bus/address~true}
-sharedServiceBusARN: ${ssm:/{{ROOT_HIERARCHY}}/api/bus/arn~true}
-customDomainName: somedomain.com
+customDomainName: api.hyperbot.groklobster.io

@@ -8,7 +8,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const handlerRegex = /\.[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
 const include = "./_webpack/include.js";
 
-const doc = yaml.safeLoad(fs.readFileSync("serverless.yml", "utf8"));
+const doc = yaml.load(fs.readFileSync("serverless.yml", "utf8"));
 
 module.exports = {
   entry: slsw.lib.entries,
