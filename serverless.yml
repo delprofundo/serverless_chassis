@@ -1,5 +1,5 @@
 service: graph-service
-frameworkVersion:  ">=2.23.0 < 3.0.0"
+frameworkVersion:  ">=2.57.0 < 3.0.0"
 provider:
   name: aws
   runtime: nodejs12.x
